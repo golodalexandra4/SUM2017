@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "T02CLOCK", "T02CLOCK.vcproj", "{98FBE6C9-069E-4793-958F-F90230FA0291}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{98FBE6C9-069E-4793-958F-F90230FA0291}.Debug|Win32.ActiveCfg = Debug|Win32
+		{98FBE6C9-069E-4793-958F-F90230FA0291}.Debug|Win32.Build.0 = Debug|Win32
+		{98FBE6C9-069E-4793-958F-F90230FA0291}.Release|Win32.ActiveCfg = Release|Win32
+		{98FBE6C9-069E-4793-958F-F90230FA0291}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
