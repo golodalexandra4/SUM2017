@@ -113,9 +113,9 @@ INT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg,
     for (i = 0; i < 39; i++)
     {
       /* eye drawing */
-      X1 = rand() % 1000;
+      X1 = rand() % w;
       X2 = X1 + 200 - i * 5;
-      Y1 = rand() % 1000;
+      Y1 = rand() % h;
       Y2 = Y1 + 200 - i * 5;
       Ellipse(hMemDC, X1, Y1, X2, Y2);
 
