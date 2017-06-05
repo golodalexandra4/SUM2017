@@ -7,6 +7,7 @@
 #include <math.h> 
 #include <stdlib.h> 
 #include <time.h> 
+#include <string.h>
 
 #include <windows.h>
 
@@ -14,6 +15,7 @@
 
 INT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, 
                            WPARAM wParam, LPARAM lParam );
+VOID ClockHandDrowing (POINT p[4], FLOAT a, INT sh, INT sw, INT lh, INT X0, INT Y0, BITMAP bm); /* Clock-hand drowing */
 
 /* programs main function */
 INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
@@ -64,14 +66,16 @@ INT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg,
 {
   HDC hDC;
   BITMAP bm;
-  INT Y0, X0, sh, sw, lh, i;
+  INT Y0, X0, sh, sw, lh, i, day, month, year;
   PAINTSTRUCT ps;
-  POINT pt, p[4], p1[4], p2[4];
+  POINT pt, p[4];
   FLOAT sec, min, hour;
   SYSTEMTIME st;
+  CHAR Str[100] = "Hello world";
   static INT w, h;
   static HDC hMemDC, hMemDCLogo;
   static HBITMAP hBm, hBmLogo, hBmXOR, hBmAND;
+  static HFONT hFnt;
 
   switch (Msg)
   {
@@ -118,63 +122,53 @@ INT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg,
 
     Rectangle(hMemDC, 0, 0, w, h);
 
+    /* Background drowing */
     SelectObject(hMemDCLogo, hBmLogo);
     GetObject(hBmLogo, sizeof(BITMAP), &bm);
     StretchBlt(hMemDC, 0, 0, w, h, hMemDCLogo, 0, 0, bm.bmWidth, bm.bmHeight, SRCCOPY);
     SetStretchBltMode(hMemDC, COLORONCOLOR);
 
     GetLocalTime(&st);
-    hour = st.wHour / 30.0 * 3.1415;
-    min = st.wMinute / 30.0 * 3.1415;
-    sec = st.wSecond / 30.0 * 3.1415;
-    X0 = (w - bm.bmWidth) / 2; 
+
+    day = st.wDay;
+    month = st.wMonth;
+    year = st.wYear;
+
+    /* Text drowing */
+    hFnt = CreateFont(75, 0, 0, 0, FW_BOLD, TRUE, FALSE, FALSE, 
+                      RUSSIAN_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, 
+                      PROOF_QUALITY, VARIABLE_PITCH | FF_ROMAN, "");
+    SelectObject(hMemDC, hFnt);
+    SetTextColor(hMemDC, RGB(0, 0, 0));
+    SetBkMode(hMemDC, TRANSPARENT);
+    TextOut(hMemDC, (w - bm.bmWidth) / 2 + 75, (h - bm.bmHeight) / 2 + 230, Str, sprintf(Str, "%i. %i. %i", day, month, year));
+
+    sec = (st.wSecond / 30.0) * 3.1415;
+    min = (st.wMinute / 30.0) * 3.1415 + sec / 60.0;
+    hour = (st.wHour / 30.0) * 3.1415 + min / 60.0; 
+    X0 = (w - bm.bmWidth) / 2 + 100; 
     Y0 = (h - bm.bmHeight) / 2; 
 
     GetObject(hBmXOR, sizeof(BITMAP), &bm);
 
+    /* Clock drowing */
     SelectObject(hMemDCLogo, hBmAND);
     BitBlt(hMemDC, X0, Y0, bm.bmWidth, bm.bmHeight, hMemDCLogo, 0, 0, SRCAND);
-    //StretchBlt(hMemDC, 0, 0, bm.bmWidth, bm.bmHeight, hMemDCLogo, 0, 0, bm.bmWidth, bm.bmHeight, SRCCOPY);
     SelectObject(hMemDCLogo, hBmXOR);
     BitBlt(hMemDC, X0, Y0, bm.bmWidth, bm.bmHeight, hMemDCLogo, 0, 0, SRCINVERT);
-    //SetStretchBltMode(hMemDCLogo, COLORONCOLOR); 
     
     sh = 20;
     sw = 10;
     lh = 60;
 
-    p[0].x = X0 + bm.bmWidth / 2 + sh * sin(min);
-    p[0].y = Y0 + bm.bmHeight / 2 - sh * cos(min);
-    p[1].x = X0 + bm.bmWidth / 2 - sw * cos(min);
-    p[1].y = Y0 + bm.bmHeight / 2 - sw * sin(min);
-    p[2].x = X0 + bm.bmWidth / 2 - lh * sin(min);
-    p[2].y = Y0 + bm.bmHeight / 2 + lh * cos(min);
-    p[3].x = X0 + bm.bmWidth / 2 + sw * cos(min);
-    p[3].y = Y0 + bm.bmHeight / 2 + sw * sin(min);
-
+    ClockHandDrowing (&p, min, sh, sw, lh, X0, Y0, bm); /* Min. clock-hand drowing */
     Polygon(hMemDC, p, 4);
 
-    p1[0].x = X0 + bm.bmWidth / 2 + sh * sin(hour) / 2;
-    p1[0].y = Y0 + bm.bmHeight / 2 - sh * cos(hour) / 2;
-    p1[1].x = X0 + bm.bmWidth / 2 - sw * cos(hour);
-    p1[1].y = Y0 + bm.bmHeight / 2 - sw * sin(hour);
-    p1[2].x = X0 + bm.bmWidth / 2 - lh * sin(hour) / 2;
-    p1[2].y = Y0 + bm.bmHeight / 2 + lh * cos(hour) / 2;
-    p1[3].x = X0 + bm.bmWidth / 2 + sw * cos(hour);
-    p1[3].y = Y0 + bm.bmHeight / 2 + sw * sin(hour);
-    
-    Polygon(hMemDC, p1, 4);
+    ClockHandDrowing (&p, hour, sh / 2, sw, lh / 2, X0, Y0, bm); /* Hour clock-hand drowing */
+    Polygon(hMemDC, p, 4);
 
-    p2[0].x = X0 + bm.bmWidth / 2 + sh * sin(sec);
-    p2[0].y = Y0 + bm.bmHeight / 2 - sh * cos(sec);
-    p2[1].x = X0 + bm.bmWidth / 2;
-    p2[1].y = Y0 + bm.bmHeight / 2;
-    p2[2].x = X0 + bm.bmWidth / 2 - lh * sin(sec);
-    p2[2].y = Y0 + bm.bmHeight / 2 + lh * cos(sec);
-    p2[3].x = X0 + bm.bmWidth / 2;
-    p2[3].y = Y0 + bm.bmHeight / 2;
-
-    Polygon(hMemDC, p2, 4);
+    ClockHandDrowing (&p, sec, sh, 0, lh, X0, Y0, bm); /* Sec. clock-hand drowing */
+    Polygon(hMemDC, p, 4);
 
     InvalidateRect(hWnd, NULL, FALSE);
     return 0;
@@ -197,8 +191,21 @@ INT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg,
     DeleteDC(hMemDCLogo);
     KillTimer(hWnd, 47);
     PostQuitMessage(0);
+    DeleteObject(hFnt);
+  
     return 0;
-
   }
   return DefWindowProc(hWnd, Msg, wParam, lParam);
+}
+
+VOID ClockHandDrowing (POINT p[4], FLOAT a, INT sh, INT sw, INT lh, INT X0, INT Y0, BITMAP bm)
+{
+  p[0].x = X0 + bm.bmWidth / 2 + sh * sin(a);
+  p[0].y = Y0 + bm.bmHeight / 2 - sh * cos(a);
+  p[1].x = X0 + bm.bmWidth / 2 - sw * cos(a);
+  p[1].y = Y0 + bm.bmHeight / 2 - sw * sin(a);
+  p[2].x = X0 + bm.bmWidth / 2 - lh * sin(a);
+  p[2].y = Y0 + bm.bmHeight / 2 + lh * cos(a);
+  p[3].x = X0 + bm.bmWidth / 2 + sw * cos(a);
+  p[3].y = Y0 + bm.bmHeight / 2 + sw * sin(a);
 }
