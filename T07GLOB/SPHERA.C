@@ -38,9 +38,9 @@ VOID SphereDraw( HDC hDC, DBL W, DBL H )
 {
   DBL size = 1, rx = size, ry = size, Wp, Hp, Xp, Yp, t;
   INT i, j;
-  POINT pts[N][M];
-
-  t = clock();
+  POINT pts[N][M], polegon[4];
+  VEC P = {1, 1, 1};
+  HBRUSH hBr, hBrOld;
 
   if (W > H)
     rx *= (DBL)W / H;
@@ -49,20 +49,44 @@ VOID SphereDraw( HDC hDC, DBL W, DBL H )
   Wp = rx;
   Hp = ry;
   
+  t = clock();
+
   for (i = 0; i < N; i++)
-  {  
     for (j = 0; j < M; j++)
-    {
-      Xp = G[i][j].X * cos(t / 1000) - G[i][j].Y * sin(t / 1000);
-      Yp = G[i][j].Y * cos(t / 1000) + G[i][j].X * sin(t / 1000);
+    {                           
+      MATR m = MatrRotate(t / 30, P);
+      VEC V = VecTransForm(G[i][j], m);;
+      
+      Xp = V.X * cos(t / 1000) - V.Y * sin(t / 1000);
+      Yp = V.Y * cos(t / 1000) + V.X * sin(t / 1000);
       pts[i][j].x = W / 2 + Xp * W / Wp;
       pts[i][j].y = H / 2 - Yp * H / Hp;
     }
-  }
 
-    for (i = 0; i < N; i++)
-      for (j = 0; j < M; j++)
-         Ellipse(hDC, pts[i][j].x - 5, pts[i][j].y - 5, pts[i][j].x + 5, pts[i][j].y + 5);
+  for (i = 1; i < N; i++)
+    for (j = 1; j < M; j++)
+    {   
+      /* Ellipse(hDC, pts[i][j].x - 3, pts[i][j].y - 3, pts[i][j].x + 3, pts[i][j].y + 3); */
+     
+      polegon[0] = pts[i][j];
+      polegon[1] = pts[i - 1][j];
+      polegon[2] = pts[i - 1][j - 1];
+      polegon[3] = pts[i][j - 1];
+  
+      if ((polegon[0].x - polegon[1].x) * (polegon[0].y + polegon[1].y) + 
+          (polegon[1].x - polegon[2].x) * (polegon[1].y + polegon[2].y) + 
+          (polegon[2].x - polegon[3].x) * (polegon[2].y + polegon[3].y) + 
+          (polegon[3].x - polegon[0].x) * (polegon[3].y + polegon[0].y) < 0)
+        continue;
+
+      hBr = CreateSolidBrush(RGB(rand() & 255, rand() & 255, rand() & 255));
+      hBrOld = SelectObject(hDC, hBr);
+      
+      Polygon(hDC, polegon, 4);
+      
+      SelectObject(hDC, hBrOld);
+      DeleteObject(hBr);
+    }
 }
 
 MATR MatrRotate( DBL AngleInDegree, VEC R )
@@ -86,6 +110,7 @@ MATR MatrRotate( DBL AngleInDegree, VEC R )
   m.A[2][0] = R.Z * R.X * (1 - cosine) - R.Y * sine;
   m.A[2][1] = R.Z * R.Y * (1 - cosine) + R.X * sine;
   m.A[2][2] = cosine + R.Z * R.Z * (1 - cosine);
+  
   return m;
 } /* End of 'MatrRotate' function */
 

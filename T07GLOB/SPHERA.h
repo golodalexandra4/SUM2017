@@ -21,4 +21,5 @@ typedef struct tagMATR
 VOID BuildSphera( HDC hDC, DBL R );
 VOID SphereDraw( HDC hDC, DBL W, DBL H );
 MATR MatrRotate( DBL AngleInDegree, VEC R );
-VEC VecTransform( VEC V, MATR M );
+VEC VecTransForm( VEC V, MATR m );
+
