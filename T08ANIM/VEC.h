@@ -1,10 +1,14 @@
-/* FILE NAME: T08ANIM.C
+/* FILE NAME: VEC.H
  * PROGRAMMER: AG4
  * DATE: 09.06.2017
  * PURPOSE: Creating animation library.
  */
 
+#ifndef __VEC_H_
+#define __VEC_H_
+
 #include <math.h>
+#include <windows.h>
 
 #define PI 3.14159265358979323946
 #define D2R(A) ((A) * (PI / 180.0))
@@ -342,3 +346,7 @@ __inline MATR MatrView( VEC Loc, VEC At, VEC Up1 )
 
   return m;
 } /* End of 'MatrView' function */
+
+#endif 
+
+/* end of 'VEC.H' file '*/

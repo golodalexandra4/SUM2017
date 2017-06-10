@@ -179,23 +179,59 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\T08ANIM.C"
+				RelativePath=".\DEF.h"
 				>
 			</File>
 			<File
-				RelativePath=".\VEC.C"
+				RelativePath=".\MAIN.C"
 				>
 			</File>
+			<Filter
+				Name="Math Support"
+				>
+				<File
+					RelativePath=".\VEC.C"
+					>
+				</File>
+				<File
+					RelativePath=".\VEC.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Animation System"
+				>
+				<File
+					RelativePath=".\ANIM.C"
+					>
+				</File>
+				<File
+					RelativePath=".\ANIM.h"
+					>
+				</File>
+				<File
+					RelativePath=".\UNITS.C"
+					>
+				</File>
+				<File
+					RelativePath=".\UNITS.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Unit Samples"
+				>
+				<File
+					RelativePath=".\U_CONTROL.C"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
-			<File
-				RelativePath=".\VEC.h"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"
