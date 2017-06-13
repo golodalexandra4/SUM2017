@@ -8,6 +8,7 @@
 #define __ANIM_H_
 
 #include "def.h"
+#include "render.h"
 
 #define AG4_MAX_UNITS 4
 #define AG4_UNIT_BASE_FIELDS \
@@ -58,11 +59,6 @@ struct tagag4UNIT
 {
   AG4_UNIT_BASE_FIELDS;
 };
-
-typedef struct tagag4UNIT_CONTROL
-{
-  AG4_UNIT_BASE_FIELDS;
-} ag4UNIT_CONTROL;
 
 struct tagag4ANIM
 {

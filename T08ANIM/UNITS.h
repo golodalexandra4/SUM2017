@@ -9,5 +9,10 @@
 
 #include "anim.h"
 
+/** Cow **/
+ag4UNIT *AG4_UnitCreateCow( VOID );
+/** Control **/
+ag4UNIT * AG4_UnitCreateControl( VOID );
+
 #endif 
 /* end of 'UNITS.H' file '*/

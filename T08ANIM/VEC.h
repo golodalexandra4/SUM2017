@@ -48,6 +48,17 @@ __inline VEC VecSet( DBL X, DBL Y, DBL Z)
   return v;
 }
 
+__inline VEC VecSet1( DBL C )
+{
+  VEC v;
+
+  v.X = C;
+  v.Y = C;
+  v.Z = C;
+
+  return v;
+}
+
 __inline MATR MatrIdentity( VOID )
 {
   return UnitMatrix;

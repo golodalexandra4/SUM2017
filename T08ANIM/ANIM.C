@@ -48,6 +48,8 @@ VOID AG4_AnimInit( HWND hWnd )
 
   AG4_Anim.IsPause = FALSE;
   AG4_Anim.FPS = 50;
+
+  AG4_RndInit();
 }
 
 /* animation's deinitialisation */
@@ -81,6 +83,8 @@ VOID AG4_AnimResize( INT W, INT H )
   ReleaseDC(AG4_Anim.hWnd, hDC);
 
   SelectObject(AG4_Anim.hDC, AG4_Anim.hFrame);
+
+  AG4_RndSetProj();
 }
 
 /* copy frame */
@@ -102,15 +106,15 @@ VOID AG4_AnimRender( VOID )
   /* clear background */
   SelectObject(AG4_Anim.hDC, GetStockObject(NULL_PEN));
   SelectObject(AG4_Anim.hDC, GetStockObject(DC_BRUSH));
-  SetDCBrushColor(AG4_Anim.hDC, RGB(255, 255, 0));
+  SetDCBrushColor(AG4_Anim.hDC, RGB(0, 55, 0));
   Rectangle(AG4_Anim.hDC, 0, 0, AG4_Anim.W + 1, AG4_Anim.H + 1); 
 
   for (i = 0; i < AG4_Anim.NumOfUnits; i++)
   {
-    SelectObject(AG4_Anim.hDC, GetStockObject(NULL_PEN));
     SelectObject(AG4_Anim.hDC, GetStockObject(DC_PEN));
-    SetDCBrushColor(AG4_Anim.hDC, RGB(255, 255, 0));
-    Rectangle(AG4_Anim.hDC, 0, 0, AG4_Anim.W + 1, AG4_Anim.H + 1);
+    SelectObject(AG4_Anim.hDC, GetStockObject(DC_BRUSH));
+    SetDCBrushColor(AG4_Anim.hDC, RGB(150, 150, 150));
+    SetDCPenColor(AG4_Anim.hDC, RGB(50, 250, 150));
 
     AG4_Anim.Units[i]->Render(AG4_Anim.Units[i], &AG4_Anim);
   }

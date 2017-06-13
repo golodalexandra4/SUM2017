@@ -213,16 +213,36 @@
 					RelativePath=".\UNITS.C"
 					>
 				</File>
-				<File
-					RelativePath=".\UNITS.h"
-					>
-				</File>
 			</Filter>
 			<Filter
 				Name="Unit Samples"
 				>
 				<File
 					RelativePath=".\U_CONTROL.C"
+					>
+				</File>
+				<File
+					RelativePath=".\U_COW.C"
+					>
+				</File>
+				<File
+					RelativePath=".\UNITS.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Rendering functions"
+				>
+				<File
+					RelativePath=".\OBJ3D.C"
+					>
+				</File>
+				<File
+					RelativePath=".\RENDER.C"
+					>
+				</File>
+				<File
+					RelativePath=".\RENDER.h"
 					>
 				</File>
 			</Filter>

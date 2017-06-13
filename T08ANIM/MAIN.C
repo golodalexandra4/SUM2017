@@ -6,7 +6,6 @@
 
 #include <stdio.h>
 #include "units.h"
-#include "anim.h"
 
 #define MY_WND_CLASS_NAME "My first window"
 
@@ -32,7 +31,7 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
   wc.lpfnWndProc = MyWindowFunc;
   wc.lpszClassName = MY_WND_CLASS_NAME;
 
-  if (!RegisterClass(&wc))                          
+  if (!RegisterClass(&wc))
   {
     MessageBox(NULL, "Error register window class", "ERROR", MB_OK);
       return 0;
@@ -47,6 +46,14 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   ShowWindow(hWnd, SW_SHOWNORMAL);
   UpdateWindow(hWnd);
+
+
+  /* Add units */
+  AG4_AnimAddUnit(AG4_UnitCreateCow( ));
+  SelectObject(AG4_Anim.hDC, GetStockObject(DC_BRUSH));
+  SetDCBrushColor(AG4_Anim.hDC, RGB(0, 255, 0));
+  AG4_AnimAddUnit(AG4_UnitCreateControl());
+
 
   while (GetMessage(&msg, NULL, 0, 0))
   {
@@ -84,7 +91,6 @@ INT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg,
 
   case WM_CREATE: /* windows contecst */
     AG4_AnimInit(hWnd);
-
     SetTimer(hWnd, 47, 30, NULL);
     return 0;
   

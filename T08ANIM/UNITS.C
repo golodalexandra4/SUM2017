@@ -75,6 +75,6 @@ ag4UNIT *AG4_AnimUnitCreate( INT Size )
   Uni->Response = AG4_UnitResponse;
   Uni->Render = AG4_UnitRender;
   return Uni;
-} /* End of 'VG4_AnimUnitCreate' function */
+} /* End of 'AG4_AnimUnitCreate' function */
 
 /* end of 'UNITS.C' file '*/
