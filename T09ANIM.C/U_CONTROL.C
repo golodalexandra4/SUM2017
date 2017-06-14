@@ -76,14 +76,11 @@ static VOID AG4_UnitRender( ag4UNIT_CONTROL *Uni, ag4ANIM *Ani )
   INT len;
   static CHAR Buf[100];
 
-  len = sprintf(Buf, "FPS: %.5f, Units: %d, M: %s%s%s (%d,%d) [%d,%d] %d "
+  len = sprintf(Buf, "FPS: %.5f, Units: %d, M: (%d,%d) [%d,%d] %d "
     "J: %.3f %.3f %.3f %.3f",
     Ani->FPS, Ani->NumOfUnits,
-    Ani->Keys[VK_LBUTTON] ? "L" : "",
-    Ani->Keys[VK_RBUTTON] ? "R" : "",
-    Ani->Keys[VK_MBUTTON] ? "M" : "",
     Ani->Mdx, Ani->Mdy, Ani->Mx, Ani->My, Ani->Mz,
-    Ani->Jx, Ani->Jy, Ani->Jy, Ani->Jr);
+    Ani->Jx, Ani->Jy, Ani->Jz, Ani->Jr);
 
   SetWindowText(Ani->hWnd, Buf);
 

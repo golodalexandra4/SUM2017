@@ -19,6 +19,7 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
   WNDCLASS wc;
   HWND hWnd;
   MSG msg;
+  INT i;
 
   wc.style = CS_VREDRAW | CS_HREDRAW; /* window style */
   wc.cbClsExtra = 0;
@@ -49,7 +50,9 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 
   /* Add units */
-  AG4_AnimAddUnit(AG4_UnitCreateCow());
+  /* for (i = 0; i < AG4_MAX_UNITS; i++) */
+  for (i = 0; i < 8; i++)
+    AG4_AnimAddUnit(AG4_UnitCreateCow());
   AG4_AnimAddUnit(AG4_UnitCreateControl());
 
 
@@ -106,7 +109,7 @@ INT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg,
     AG4_AnimResize(w, h);
     AG4_AnimRender();
     return 0;
-
+        
   case WM_KEYDOWN:
     if (wParam == VK_ESCAPE)
       DestroyWindow(hWnd);
@@ -124,7 +127,7 @@ INT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg,
     AG4_AnimCopyFrame();
     EndPaint(hWnd, &ps);
     return 0;
-
+  
   case WM_ERASEBKGND:
     return 1;
 

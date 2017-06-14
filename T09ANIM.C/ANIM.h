@@ -10,7 +10,7 @@
 #include "def.h"
 #include "render.h"
 
-#define AG4_MAX_UNITS 4
+#define AG4_MAX_UNITS 9
 #define AG4_UNIT_BASE_FIELDS \
   /* Unit initialization function.                \
    * ARGUMENTS:                                   \
@@ -79,7 +79,7 @@ struct tagag4ANIM
   BYTE Keys[256];       /* keyboard */
   BYTE KeysOld[256];
   BYTE KeysClick[256];
-  
+ 
   INT
     Mx, My, Mz,     /* Absolute coordinates */
     Mdx, Mdy, Mdz;  /* Relative coordinates shift */

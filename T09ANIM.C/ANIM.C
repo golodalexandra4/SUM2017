@@ -11,7 +11,7 @@
 
 #pragma comment(lib, "winmm")
 
-#define AG4_MAX_UNITS 4
+#define AG4_MAX_UNITS 9
 
 #define AG4_GET_JOYSTICK_AXIS(A) \
   (2.0 * (ji.dw ## A ## pos = jc.w ## A ## min) / (jc.w ## A ## max - jc.w ## A ## min - 1) - 1)

@@ -206,11 +206,12 @@ __inline MATR MatrRotateY( DBL AngleInDegree )
 {
   DBL a = D2R(AngleInDegree);
   MATR m = UnitMatrix;
+  DBL c = cos(a), s = sin(a);
 
-  m.M[0][0] = cos(a);
-  m.M[2][0] = sin(a);
-  m.M[0][2] = - sin(a);
-  m.M[2][2] = cos(a);
+  m.M[0][0] = c;
+  m.M[2][0] = s;
+  m.M[0][2] = -s;
+  m.M[2][2] = c;
 
   return m;
 }

@@ -16,6 +16,7 @@ typedef struct tagag4UNIT_COW
   AG4_UNIT_BASE_FIELDS;
   ag4OBJ3D Cow; /* Cow model1*/
   DBL Rotate;   /* Cow rotate */
+  VEC Pos;
 } ag4UNIT_COW;
 
 /* Cow drawing unit initialization function.
@@ -29,6 +30,7 @@ typedef struct tagag4UNIT_COW
 static VOID AG4_UnitInit( ag4UNIT_COW *Uni, ag4ANIM *Ani )
 {
   AG4_RndObjLoad(&Uni->Cow, "cow.object");
+  Uni->Pos = VecSet(rand() % 20 - 10, rand() % 20 - 10, rand() % 20 - 10);
 } /* End of 'VG4_UnitInit' function */
 
 /* Cow drawing unit deinitialization function.
@@ -54,11 +56,11 @@ static VOID AG4_UnitClose( ag4UNIT_COW *Uni, ag4ANIM *Ani )
  */
 static VOID AG4_UnitResponse( ag4UNIT_COW *Uni, ag4ANIM *Ani )
 {
-  Uni->Rotate += Ani->DeltaTime * Ani->Keys[VK_LBUTTON] * Ani->Mdx * 102;
-  /*
-  Uni->Rotate += Ani->DeltaTime * Ani->Keys[VK_RBUTTON] * (Ani->W / 2 - Ani->Mx) / 5.0;
-  Uni->Rotate += Ani->DeltaTime * AG4_MouseWheel * 2;
-  */
+  Uni->Rotate += Ani->GlobalDeltaTime * Ani->Keys[VK_LBUTTON] * Ani->Mdx * 102;
+  Uni->Rotate += Ani->DeltaTime * Ani->Keys['A'] * 102;
+  Uni->Rotate += -Ani->DeltaTime * Ani->Keys['D'] * 102;
+  Uni->Pos.X += - Ani->DeltaTime * Ani->Keys[VK_LEFT] * 10 + Ani->DeltaTime * Ani->Keys[VK_RIGHT] * 10;
+  Uni->Pos.Z += - Ani->DeltaTime * Ani->Keys[VK_UP] * 10 + Ani->DeltaTime * Ani->Keys[VK_DOWN] * 10;
 } /* End of 'AG4_UnitResponse' function */
 
 /* Cow drawing unit render function.
@@ -71,8 +73,12 @@ static VOID AG4_UnitResponse( ag4UNIT_COW *Uni, ag4ANIM *Ani )
  */
 static VOID AG4_UnitRender( ag4UNIT_COW *Uni, ag4ANIM *Ani )
 {
-  AG4_RndObjDraw(&Uni->Cow, MatrRotateY(Uni->Rotate));
-} /* End of 'VG4_UnitRender' function */
+  VEC tmp = Uni->Pos;
+  tmp.X += Ani->Mz / 60;
+  tmp.Y += Ani->Mz / 60;
+  tmp.Z += Ani->Mz / 60;
+  AG4_RndObjDraw(&Uni->Cow, MatrMulMatr(MatrRotate(Uni->Rotate, VecSet(0, -1, 0)), MatrTranslate(tmp)));
+} /* End of 'AG4_UnitRender' function */
 
 /* Cow drawing unit creation function.
  * ARGUMENTS: None.
