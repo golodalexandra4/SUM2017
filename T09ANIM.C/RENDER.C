@@ -28,7 +28,7 @@ VOID AG4_RndInit( VOID )
 {
   AG4_RndMatrView = MatrView(VecSet1(23), VecSet1(0), VecSet(0, 1, 0));
   glEnable(GL_DEPTH_TEST);
-  glClearColor(0.3, 0.5, 0.7, 1);
+  glClearColor(0, 0, 0, 1);
 } /* End of 'AG4_RndInit' function */
 
 /* Project parameters adjust function.

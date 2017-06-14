@@ -61,8 +61,19 @@ static VOID AG4_UnitResponse( ag4UNIT_COW *Uni, ag4ANIM *Ani )
   Uni->Rotate += -Ani->DeltaTime * Ani->Keys['D'] * 102;
   Uni->Pos.X += - Ani->DeltaTime * Ani->Keys[VK_LEFT] * 10 + Ani->DeltaTime * Ani->Keys[VK_RIGHT] * 10;
   Uni->Pos.Z += - Ani->DeltaTime * Ani->Keys[VK_UP] * 10 + Ani->DeltaTime * Ani->Keys[VK_DOWN] * 10;
-} /* End of 'AG4_UnitResponse' function */
 
+  Uni->Pos.X += Ani->DeltaTime * Ani->Jx * 100;
+  Uni->Pos.Z += Ani->DeltaTime * Ani->Jy * 100;
+  Uni->Rotate += -Ani->DeltaTime * Ani->Jr * 100;
+  Uni->Rotate += -Ani->DeltaTime * Ani->Jz * 100;
+  
+  if (Ani->JButClick[6])
+  {  
+    Uni->Pos.X = 0;
+    Uni->Pos.Y = 0;
+    Uni->Pos.Z = 0;
+  }
+}
 /* Cow drawing unit render function.
  * ARGUMENTS:
  *   - self-pointer to unit object:
