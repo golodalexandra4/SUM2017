@@ -41,9 +41,9 @@ static VOID AG4_UnitInit( ag4UNIT_COW *Uni, ag4ANIM *Ani )
  *       ag4ANIM *Ani;
  * RETURNS: None.
  */
-static VOID AG4_UnitClose( ag4UNIT_COW *Uni, ag4ANIM *Ani )
+static VOID AG4_UnitClose( ag4OBJ *Uni )
 {
-  AG4_RndObjFree(&Uni->Cow);
+  AG4_RndObjFree(Uni);
 } /* End of 'AG4_UnitClose' function */
 
 /* Cow drawing unit inter frame events handle function.

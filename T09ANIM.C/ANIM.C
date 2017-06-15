@@ -8,6 +8,7 @@
 #include <mmsystem.h>
 #include <stdlib.h>
 #include "units.h"
+#include "anim.h"
 
 #pragma comment(lib, "winmm")
 
@@ -73,6 +74,9 @@ BOOL AG4_AnimInit( HWND hWnd )
   }
 
   AG4_RndInit();
+
+  AG4_RndProgId = AG4_RndShaderLoad("A");
+  
   return TRUE;
 }
 
@@ -86,6 +90,8 @@ VOID AG4_AnimClose( VOID )
     AG4_Anim.Units[i]->Close(AG4_Anim.Units[i], &AG4_Anim);
     free(AG4_Anim.Units[i]);
   }
+
+  AG4_RndShaderFree(AG4_RndProgId);
 
   AG4_Anim.NumOfUnits = 0;
 
@@ -119,6 +125,7 @@ VOID AG4_AnimRender( VOID )
   INT i;
   LARGE_INTEGER t;
   POINT pt;
+  static DBL ShdTime;
   
   /*** Handle timer ***/
   AG4_FrameCounter++;                    /* increment frame counter (for FPS) */
@@ -203,6 +210,15 @@ VOID AG4_AnimRender( VOID )
 
   for (i = 0; i < AG4_Anim.NumOfUnits; i++)
     AG4_Anim.Units[i]->Response(AG4_Anim.Units[i], &AG4_Anim);
+
+
+  /*** Update shader ***/
+  if (AG4_Anim.GlobalTime - ShdTime > 2)
+  {
+    AG4_RndShaderFree(AG4_RndProgId);
+    AG4_RndProgId = AG4_RndShaderLoad("A");
+    ShdTime = AG4_Anim.GlobalTime;
+  }
 
   /*** Clear frame ***/
   /* Clear background */

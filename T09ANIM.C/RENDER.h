@@ -28,6 +28,11 @@ extern MATR
  * ARGUMENTS: None.
  * RETURNS: None.
  */
+
+/* Current shader */
+extern UINT
+  AG4_RndProgId;    /* Shader program identifier */
+
 VOID AG4_RndInit( VOID );
 
 /* Project parameters adjust function.
@@ -40,6 +45,27 @@ VOID AG4_RndSetProj( VOID );
  * Object handle
  ***/
 
+
+typedef struct tagag4VERTEX
+{
+  VEC P;
+  VEC2 T;
+  VEC N;
+  VEC4 C;
+}ag4VERTEX;
+
+typedef struct tagag4PRIM
+{
+  BOOL IsTrimesh;
+  INT NumOfI;
+  MATR M;
+
+  /* VBO Data */
+  INT VA, VBuf;
+  /* Index Buffer */
+  INT IBuf;
+}ag4PRIM;
+
 /* Object description type */
 typedef struct tagag4OBJ3D
 {
@@ -48,6 +74,12 @@ typedef struct tagag4OBJ3D
   INT (*F)[3]; /* Facets array (point indices) */
   INT NumOfF;  /* Facets array size */
 } ag4OBJ3D;
+
+typedef struct tagag4OBJ
+{
+  ag4PRIM *P;
+  INT NumOfP;
+} ag4OBJ;
 
 /* Object free memory function.
  * ARGUMENTS:
@@ -66,7 +98,7 @@ BOOL AG4_RndObjLoad( ag4OBJ3D *Obj, CHAR *FileName );
  *       vg4OBJ3D *Obj;
  * RETURNS: None.
  */
-VOID AG4_RndObjFree( ag4OBJ3D *Obj );
+VOID AG4_RndObjFree( ag4OBJ *Obj );
 
 /* Object drawing function.
  * ARGUMENTS:
@@ -77,6 +109,127 @@ VOID AG4_RndObjFree( ag4OBJ3D *Obj );
  * RETURNS: None.
  */
 VOID AG4_RndObjDraw( ag4OBJ3D *Obj, MATR M );
+
+/* Create primitive function.
+ * ARGUMENTS:
+ *   - created primitive:
+ *       ag4PRIM *Pr;
+ *   - trimesh flag:
+ *       BOOL IsTrimesh;
+ *   - vertex array:
+ *       ag4VERTEX *V;
+ *   - vertex array size:
+ *       INT NumOfV
+ *   - index array:
+ *       INT *I;
+ *   - index array size:
+ *       INT NumOfI;
+ * RETURNS: None.
+ */
+VOID AG4_RndPrimCreate( ag4PRIM *Pr, BOOL IsTrimesh,
+                        ag4VERTEX *V, INT NumOfV,
+                        INT *I, INT NumOfI );
+/* Free primitive function.
+ * ARGUMENTS:
+ *   - deleted primitive:
+ *       ag4PRIM *Pr;
+ * RETURNS: None.
+ */
+VOID AG4_RndPrimFree( ag4PRIM *Pr );
+
+/* Draw primitive function.
+ * ARGUMENTS:
+ *   - drawing primitive:
+ *       ag4PRIM *Pr;
+ *   - transformation matrix:
+ *       MATR M;
+ * RETURNS: None.
+ */
+VOID AG4_RndPrimDraw( ag4PRIM *Pr, MATR M );
+
+/* Primitive load function.
+ * ARGUMENTS:
+ *   - primitive pointer:
+ *       ag4OBJ3D *Obj;
+ *   - model *.OBJ file name:
+ *       CHAR *FileName;
+ * RETURNS:
+ *   (BOOL) TRUE if success, FALSE otherwise.
+ */
+BOOL AG4_RndPrimLoad( ag4PRIM *Obj, CHAR *FileName );
+
+/* Save text to log file function.
+ * ARGUMENTS:
+ *   - text 1 to save:
+ *       CHAR *Stage;
+ *   - text 2 to save:
+ *       CHAR *Text;
+ * RETURNS: None.
+ */
+
+/* Evaluate trimesh vertex normals function.
+ * ARGUMENTS:
+ *   - vertex array:
+ *       ag4VERTEX *V;
+ *   - vertex array size:
+ *       INT NumOfV;
+ *   - index array:
+ *       INT *I;
+ *   - index array size:
+ *       INT NumOfI;
+ * RETURNS: None.
+ */
+VOID AG4_RndTriMeshEvalNormals( ag4VERTEX *V, INT NumOfV, INT *I, INT NumOfI );
+
+/* Evaluate grid vertex normals function.
+ * ARGUMENTS:
+ *   - vertex array:
+ *       ag4VERTEX *V;
+ *   - grid split numbers:
+ *       INT N, M;
+ * RETURNS: None.
+ */
+VOID AG4_RndGridEvalNormals( ag4VERTEX *V, INT N, INT M );
+
+/* Sphere primitive creation function.
+ * ARGUMENTS:
+ *   - primitive to be create:
+ *       ag4PRIM *Pr;
+ *   - sphere center position:
+ *       VEC C;
+ *   - sphere radius:
+ *       FLT R;
+ *   - sphere split numbers:
+ *       INT N, M;
+ * RETURNS: None.
+ */
+VOID AG4_RndPrimCreateSphere( ag4PRIM *Pr, VEC C, FLT R, INT N, INT M );
+
+/* Plane primitive creation function.
+ * ARGUMENTS:
+ *   - primitive to be create:
+ *       ag4PRIM *Pr;
+ *   - plane corner position:
+ *       VEC C;
+ *   - plane directions:
+ *       VEC Du, Dv;
+ *   - plane split numbers:
+ *       INT N, M;
+ * RETURNS: None.
+ */
+VOID AG4_RndPrimCreatePlane( ag4PRIM *Pr, VEC C, VEC Du, VEC Dv, INT N, INT M );
+static VOID AG4_RndShaderLog( CHAR *Stage, CHAR *Text );
+
+/* Text file load to memory function.
+ * ARGUMENTS:
+ *   - file name:
+ *       CHAR *FileName;
+ * RETURNS:
+ *   (CHAR *) load text or NULL if error is occured.
+ */
+static CHAR * AG4_RndShaderLoadTextFile( CHAR *FileName );
+UINT AG4_RndShaderLoad( CHAR *FileNamePrefix );
+VOID AG4_RndShaderFree( UINT Prg );
 
 #endif /* __RENDER_H_ */
 

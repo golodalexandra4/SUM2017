@@ -20,6 +20,8 @@ MATR
   AG4_RndMatrView, /* Viewer matrix */
   AG4_RndMatrProj; /* Projection matrix */
 
+UINT
+  AG4_RndProjId;
 /* Rendering system initialization function.
  * ARGUMENTS: None.
  * RETURNS: None.
@@ -46,5 +48,9 @@ VOID AG4_RndSetProj( VOID )
 
   AG4_RndMatrProj = MatrFrustum(-rx, rx, -ry, ry, AG4_RndProjDist, AG4_RndProjFarClip);
 } /* End of 'AG4_RndSetProj' function */
+
+/* Current shader */
+UINT
+  VG4_RndProgId;    /* Shader program identifier */
 
 /* END OF 'RENDER.C' FILE */

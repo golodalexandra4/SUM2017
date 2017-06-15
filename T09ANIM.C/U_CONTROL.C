@@ -57,6 +57,8 @@ static VOID AG4_UnitResponse( ag4UNIT_CONTROL *Uni, ag4ANIM *Ani )
     AG4_FlipFullScreen( Ani->hWnd );
   else if (Ani->KeysClick['P'])
     AG4_Anim.IsPause = !AG4_Anim.IsPause;
+  else if (Ani->JButClick[4])
+    AG4_Anim.IsPause = !AG4_Anim.IsPause;
   else if (Ani->KeysClick['W'])
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
   else if (Ani->KeysClick['Q'])

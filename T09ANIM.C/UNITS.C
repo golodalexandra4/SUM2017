@@ -26,7 +26,7 @@ static VOID AG4_UnitInit( ag4UNIT *Uni, ag4ANIM *Ani )
  * RETURNS: None.
  */
 
-static VOID AG4_UnitClose( ag4UNIT *Uni, ag4ANIM *Ani )
+static VOID AG4_UnitClose( ag4PRIM *Uni, ag4ANIM *Ani )
 {
 } /* End of 'VG4_UnitClose' function */
 

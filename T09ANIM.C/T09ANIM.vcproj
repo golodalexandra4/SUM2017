@@ -234,7 +234,7 @@
 				Name="Rendering functions"
 				>
 				<File
-					RelativePath=".\OBJ3D.C"
+					RelativePath=".\OBJ.C"
 					>
 				</File>
 				<File
@@ -243,6 +243,18 @@
 				</File>
 				<File
 					RelativePath=".\RENDER.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Shaders"
+				>
+				<File
+					RelativePath=".\PRIM.C"
+					>
+				</File>
+				<File
+					RelativePath=".\SHADERS.C"
 					>
 				</File>
 			</Filter>

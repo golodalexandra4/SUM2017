@@ -16,15 +16,27 @@
 
 /* base float type */
 typedef double DBL;
+typedef float FLT;
+typedef unsigned int UINT;
 /* type for vector in space */
 typedef struct tagVEC
 {
   DBL X, Y, Z;
 } VEC;
+
+typedef struct tagVEC2
+{
+  DBL X, Y;
+} VEC2;
+
+typedef struct tagVEC4
+{
+  DBL X, Y, Z, W;
+} VEC4;
 /* type for matrix */
 typedef struct tagMATR
 {
-  DBL M[4][4];
+  FLT M[4][4];
 } MATR;
 
 static MATR UnitMatrix = 
@@ -44,6 +56,28 @@ __inline VEC VecSet( DBL X, DBL Y, DBL Z)
   v.X = X;
   v.Y = Y;
   v.Z = Z;
+
+  return v;
+}
+
+__inline VEC4 Vec4Set( DBL X, DBL Y, DBL Z, DBL W)
+{
+  VEC4 v;
+
+  v.X = X;
+  v.Y = Y;
+  v.Z = Z;
+  v.W = W;
+
+  return v;
+}
+
+__inline VEC2 Vec2Set( DBL X, DBL Y )
+{
+  VEC2 v;
+
+  v.X = X;
+  v.Y = Y;
 
   return v;
 }
@@ -375,6 +409,21 @@ __inline MATR MatrFrustum( DBL left, DBL right, DBL bottom, DBL top, DBL Progect
   return M;
 }
 
+__inline MATR MatrMulMatr3( MATR M1, MATR M2, MATR M3 )
+{
+  return MatrMulMatr(M1, MatrMulMatr(M2, M3));
+}
+
+__inline MATR MatrMulMatr4( MATR M1, MATR M2, MATR M3, MATR M4 )
+{
+  return MatrMulMatr(M1, MatrMulMatr3(M2, M3, M4));
+}
+
+
+__inline FLT Rnd1( VOID )
+{
+  return sin(rand());
+}
 #endif 
 
 /* end of 'VEC.H' file '*/
