@@ -15,7 +15,7 @@
 #include "def.h"
 
 /* Project parameters */
-extern DBL
+extern FLT
   AG4_RndProjDist, /* Distance from viewer to project plane */
   AG4_RndProjSize, /* Prohect plane inner size */
   AG4_RndProjFarClip; /*  */
@@ -24,15 +24,14 @@ extern MATR
   AG4_RndMatrView, /* Viewer matrix */
   AG4_RndMatrProj; /* Projection matrix */
 
-/* Rendering system initialization function.
- * ARGUMENTS: None.
- * RETURNS: None.
- */
-
 /* Current shader */
 extern UINT
   AG4_RndProgId;    /* Shader program identifier */
 
+/* Rendering system initialization function.
+ * ARGUMENTS: None.
+ * RETURNS: None.
+ */
 VOID AG4_RndInit( VOID );
 
 /* Project parameters adjust function.
@@ -64,33 +63,13 @@ typedef struct tagag4PRIM
   INT VA, VBuf;
   /* Index Buffer */
   INT IBuf;
-}ag4PRIM;
-
-/* Object description type */
-typedef struct tagag4OBJ3D
-{
-  VEC *V;      /* Vertex array */
-  INT NumOfV;  /* Vertex array size */
-  INT (*F)[3]; /* Facets array (point indices) */
-  INT NumOfF;  /* Facets array size */
-} ag4OBJ3D;
+} ag4PRIM;
 
 typedef struct tagag4OBJ
 {
   ag4PRIM *P;
   INT NumOfP;
 } ag4OBJ;
-
-/* Object free memory function.
- * ARGUMENTS:
- *   - object pointer:
- *       ag4OBJ3D *Obj;
- *   - model *.OBJ file name:
- *       CHAR *FileName;
- * RETURNS:
- *   (BOOL) TRUE if success, FALSE otherwise.
- */
-BOOL AG4_RndObjLoad( ag4OBJ3D *Obj, CHAR *FileName );
 
 /* Object free memory function.
  * ARGUMENTS:
@@ -108,7 +87,7 @@ VOID AG4_RndObjFree( ag4OBJ *Obj );
  *       MATR M;
  * RETURNS: None.
  */
-VOID AG4_RndObjDraw( ag4OBJ3D *Obj, MATR M );
+VOID AG4_RndObjDraw( ag4OBJ *Obj, MATR M );
 
 /* Create primitive function.
  * ARGUMENTS:
@@ -157,15 +136,6 @@ VOID AG4_RndPrimDraw( ag4PRIM *Pr, MATR M );
  *   (BOOL) TRUE if success, FALSE otherwise.
  */
 BOOL AG4_RndPrimLoad( ag4PRIM *Obj, CHAR *FileName );
-
-/* Save text to log file function.
- * ARGUMENTS:
- *   - text 1 to save:
- *       CHAR *Stage;
- *   - text 2 to save:
- *       CHAR *Text;
- * RETURNS: None.
- */
 
 /* Evaluate trimesh vertex normals function.
  * ARGUMENTS:
@@ -218,7 +188,6 @@ VOID AG4_RndPrimCreateSphere( ag4PRIM *Pr, VEC C, FLT R, INT N, INT M );
  * RETURNS: None.
  */
 VOID AG4_RndPrimCreatePlane( ag4PRIM *Pr, VEC C, VEC Du, VEC Dv, INT N, INT M );
-static VOID AG4_RndShaderLog( CHAR *Stage, CHAR *Text );
 
 /* Text file load to memory function.
  * ARGUMENTS:
@@ -227,7 +196,6 @@ static VOID AG4_RndShaderLog( CHAR *Stage, CHAR *Text );
  * RETURNS:
  *   (CHAR *) load text or NULL if error is occured.
  */
-static CHAR * AG4_RndShaderLoadTextFile( CHAR *FileName );
 UINT AG4_RndShaderLoad( CHAR *FileNamePrefix );
 VOID AG4_RndShaderFree( UINT Prg );
 

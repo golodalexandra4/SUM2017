@@ -148,7 +148,7 @@ VOID AG4_RndPrimDraw( ag4PRIM *Pr, MATR M )
  * RETURNS:
  *   (BOOL) TRUE if success, FALSE otherwise.
  */
-BOOL AG4_RndPrimLoad( ag4PRIM *Obj, CHAR *FileName )
+BOOL AG4_RndPrimLoad( ag4PRIM *Pr, CHAR *FileName )
 {
   INT vn = 0, fn = 0, size;
   FILE *F;
@@ -156,7 +156,7 @@ BOOL AG4_RndPrimLoad( ag4PRIM *Obj, CHAR *FileName )
   INT *I;
   static CHAR Buf[1000];
 
-  memset(Obj, 0, sizeof(ag4PRIM));
+  memset(Pr, 0, sizeof(ag4PRIM));
   if ((F = fopen(FileName, "r")) == NULL)
     return FALSE;
 
@@ -210,7 +210,7 @@ BOOL AG4_RndPrimLoad( ag4PRIM *Obj, CHAR *FileName )
   fclose(F);
 
   AG4_RndTriMeshEvalNormals(V, vn, I, fn);
-  AG4_RndPrimCreate(Obj, TRUE, V, vn, I, fn);
+  AG4_RndPrimCreate(Pr, TRUE, V, vn, I, fn);
 
   free(V);
   return TRUE;
@@ -310,14 +310,14 @@ VOID AG4_RndGridEvalNormals( ag4VERTEX *V, INT N, INT M )
  *       INT N, M;
  * RETURNS: None.
  */
-VOID AG4_RndPrimCreateSphere( ag4PRIM *Pr, VEC C, FLT R, INT N, INT M )
+/* VOID AG4_RndPrimCreateSphere( ag4PRIM *Pr, VEC C, FLT R, INT N, INT M )
 {
   ag4VERTEX *V, *p;
   INT
     i, j, k, v,
     *I,
     size = sizeof(ag4VERTEX) * N * M + sizeof(INT) * (M * 2 + 1) * (N - 1);
-  DBL theta, phi;
+  FLT theta, phi;
 
   memset(Pr, 0, sizeof(Pr));
   if ((V = malloc(size)) == NULL)
@@ -325,7 +325,7 @@ VOID AG4_RndPrimCreateSphere( ag4PRIM *Pr, VEC C, FLT R, INT N, INT M )
   memset(V, 0, size);
   I = (INT *)(V + N * M);
 
-  /* Setup vertices */
+  /* Setup vertices *
   for (p = V, theta = 0, i = 0; i < N; i++, theta += PI / (N - 1))
     for (phi = 0, j = 0; j < M; j++, phi += 2 * PI / (M - 1), p++)
     {
@@ -337,7 +337,7 @@ VOID AG4_RndPrimCreateSphere( ag4PRIM *Pr, VEC C, FLT R, INT N, INT M )
       p->T = Vec2Set(j / (M - 1.0), i / (N - 1.0));
     }
 
-  /* Setup indices */
+  /* Setup indices *
   for (k = 0, v = 0, i = 0; i < N - 1; i++)
   {
     for (j = 0; j < M; j++, v++)
@@ -364,7 +364,7 @@ VOID AG4_RndPrimCreateSphere( ag4PRIM *Pr, VEC C, FLT R, INT N, INT M )
  *       INT N, M;
  * RETURNS: None.
  */
-VOID AG4_RndPrimCreatePlane( ag4PRIM *Pr, VEC C, VEC Du, VEC Dv, INT N, INT M )
+/* VOID AG4_RndPrimCreatePlane( ag4PRIM *Pr, VEC C, VEC Du, VEC Dv, INT N, INT M )
 {
   ag4VERTEX *V, *p;
   INT
@@ -379,7 +379,7 @@ VOID AG4_RndPrimCreatePlane( ag4PRIM *Pr, VEC C, VEC Du, VEC Dv, INT N, INT M )
   memset(V, 0, size);
   I = (INT *)(V + N * M);
 
-  /* Setup vertices */
+  /* Setup vertices *
   for (p = V, i = 0; i < N; i++)
     for (j = 0; j < M; j++, p++)
     {
@@ -391,7 +391,7 @@ VOID AG4_RndPrimCreatePlane( ag4PRIM *Pr, VEC C, VEC Du, VEC Dv, INT N, INT M )
       p->T = Vec2Set(j / (M - 1.0), i / (N - 1.0));
     }
 
-  /* Setup indices */
+  /* Setup indices *
   for (k = 0, v = 0, i = 0; i < N - 1; i++)
   {
     for (j = 0; j < M; j++, v++)

@@ -11,7 +11,7 @@
 #include "anim.h"
 
 /* Project parameters */
-DBL
+FLT
   AG4_RndProjSize = 1, /* Prohect plane inner size */
   AG4_RndProjDist = 1, /* Distance from viewer to project plane */
   AG4_RndProjFarClip = 1000; /*  */
@@ -21,7 +21,8 @@ MATR
   AG4_RndMatrProj; /* Projection matrix */
 
 UINT
-  AG4_RndProjId;
+  AG4_RndProgId;
+
 /* Rendering system initialization function.
  * ARGUMENTS: None.
  * RETURNS: None.
@@ -39,12 +40,12 @@ VOID AG4_RndInit( VOID )
  */
 VOID AG4_RndSetProj( VOID )
 {
-  DBL rx = AG4_RndProjSize / 2, ry = AG4_RndProjSize / 2;
+  FLT rx = AG4_RndProjSize / 2, ry = AG4_RndProjSize / 2;
 
   if (AG4_Anim.W > AG4_Anim.H)
-    rx *= (DBL)AG4_Anim.W / AG4_Anim.H;
+    rx *= (FLT)AG4_Anim.W / AG4_Anim.H;
   else
-    ry *= (DBL)AG4_Anim.H / AG4_Anim.W;
+    ry *= (FLT)AG4_Anim.H / AG4_Anim.W;
 
   AG4_RndMatrProj = MatrFrustum(-rx, rx, -ry, ry, AG4_RndProjDist, AG4_RndProjFarClip);
 } /* End of 'AG4_RndSetProj' function */

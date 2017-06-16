@@ -14,8 +14,8 @@
 typedef struct tagag4UNIT_COW
 {
   AG4_UNIT_BASE_FIELDS;
-  ag4OBJ3D Cow; /* Cow model1*/
-  DBL Rotate;   /* Cow rotate */
+  ag4PRIM Cow; /* Cow model1*/
+  FLT Rotate;   /* Cow rotate */
   VEC Pos;
 } ag4UNIT_COW;
 
@@ -29,7 +29,7 @@ typedef struct tagag4UNIT_COW
  */
 static VOID AG4_UnitInit( ag4UNIT_COW *Uni, ag4ANIM *Ani )
 {
-  AG4_RndObjLoad(&Uni->Cow, "cow.object");
+  AG4_RndPrimLoad(&Uni->Cow, "cow.object");
   Uni->Pos = VecSet(rand() % 20 - 10, rand() % 20 - 10, rand() % 20 - 10);
 } /* End of 'VG4_UnitInit' function */
 
@@ -41,9 +41,9 @@ static VOID AG4_UnitInit( ag4UNIT_COW *Uni, ag4ANIM *Ani )
  *       ag4ANIM *Ani;
  * RETURNS: None.
  */
-static VOID AG4_UnitClose( ag4OBJ *Uni )
+static VOID AG4_UnitClose( ag4UNIT_COW *Uni, ag4ANIM *Ani )
 {
-  AG4_RndObjFree(Uni);
+  AG4_RndPrimFree(&Uni->Cow);
 } /* End of 'AG4_UnitClose' function */
 
 /* Cow drawing unit inter frame events handle function.
@@ -88,7 +88,7 @@ static VOID AG4_UnitRender( ag4UNIT_COW *Uni, ag4ANIM *Ani )
   tmp.X += Ani->Mz / 60;
   tmp.Y += Ani->Mz / 60;
   tmp.Z += Ani->Mz / 60;
-  AG4_RndObjDraw(&Uni->Cow, MatrMulMatr(MatrRotate(Uni->Rotate, VecSet(0, -1, 0)), MatrTranslate(tmp)));
+  AG4_RndPrimDraw(&Uni->Cow, MatrMulMatr(MatrRotate(Uni->Rotate, VecSet(0, -1, 0)), MatrTranslate(tmp)));
 } /* End of 'AG4_UnitRender' function */
 
 /* Cow drawing unit creation function.

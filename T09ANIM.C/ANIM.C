@@ -70,13 +70,15 @@ BOOL AG4_AnimInit( HWND hWnd )
     wglMakeCurrent(NULL, NULL);
     wglDeleteContext(AG4_Anim.hGLRC);
     ReleaseDC(AG4_Anim.hWnd, AG4_Anim.hDC);
+    memset(&AG4_Anim, 0, sizeof(ag4ANIM));
     return FALSE;
   }
+ 
+  AG4_RndProgId = AG4_RndShaderLoad("A");
+  glEnable(GL_DEPTH_TEST);
+  glClearColor(0.3, 0.5, 0.7, 1);
 
   AG4_RndInit();
-
-  AG4_RndProgId = AG4_RndShaderLoad("A");
-  
   return TRUE;
 }
 
@@ -92,14 +94,14 @@ VOID AG4_AnimClose( VOID )
   }
 
   AG4_RndShaderFree(AG4_RndProgId);
-
-  AG4_Anim.NumOfUnits = 0;
+  AG4_RndProgId = 0;
 
   /* Delete OpenGL data */
   wglMakeCurrent(NULL, NULL);
   wglDeleteContext(AG4_Anim.hGLRC);
   /* Delete GDI data */
   ReleaseDC(AG4_Anim.hWnd, AG4_Anim.hDC);
+  AG4_Anim.NumOfUnits = 0;
 }
 
 /* change frame's size */
@@ -125,7 +127,7 @@ VOID AG4_AnimRender( VOID )
   INT i;
   LARGE_INTEGER t;
   POINT pt;
-  static DBL ShdTime;
+  static FLT ShdTime;
   
   /*** Handle timer ***/
   AG4_FrameCounter++;                    /* increment frame counter (for FPS) */
