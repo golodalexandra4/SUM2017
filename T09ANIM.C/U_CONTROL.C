@@ -51,6 +51,13 @@ static VOID AG4_UnitClose( ag4UNIT_CONTROL *Uni, ag4ANIM *Ani )
  */
 static VOID AG4_UnitResponse( ag4UNIT_CONTROL *Uni, ag4ANIM *Ani )
 {
+  static BOOL abrakadabra = FALSE;
+  if (!abrakadabra)
+  {  
+    AG4_AnimAddUnit(AG4_UnitCreateGround());
+    abrakadabra = !abrakadabra;
+  }
+
   if (Ani->KeysClick[VK_ESCAPE])
     AG4_AnimDoExit();
   else if (Ani->KeysClick['F'])

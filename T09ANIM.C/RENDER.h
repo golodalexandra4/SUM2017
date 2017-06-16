@@ -28,6 +28,9 @@ extern MATR
 extern UINT
   AG4_RndProgId;    /* Shader program identifier */
 
+extern VEC AG4_RndLightPos;
+extern VEC AG4_RndLightColor;
+
 /* Rendering system initialization function.
  * ARGUMENTS: None.
  * RETURNS: None.

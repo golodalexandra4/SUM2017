@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="windows-1251"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="T09ANIM"
 	ProjectGUID="{08219F53-22BF-4EB1-9551-61259A8D1255}"
 	RootNamespace="T08ANIM"
@@ -223,6 +223,10 @@
 				</File>
 				<File
 					RelativePath=".\U_COW.C"
+					>
+				</File>
+				<File
+					RelativePath=".\U_GROUND.C"
 					>
 				</File>
 				<File

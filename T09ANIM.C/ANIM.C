@@ -292,8 +292,7 @@ VOID AG4_FlipFullScreen( HWND hWnd )
     AdjustWindowRect(&rc, GetWindowLong(hWnd, GWL_STYLE), FALSE);
 
     SetWindowPos(hWnd, HWND_TOPMOST,
-      rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top,
-      SWP_NOOWNERZORDER);
+      rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, SWP_NOOWNERZORDER);
   }
   IsFullScreen = !IsFullScreen;
 } /* End of 'FlipFullScreen' function */

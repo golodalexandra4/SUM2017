@@ -23,13 +23,18 @@ MATR
 UINT
   AG4_RndProgId;
 
+VEC AG4_RndLightPos;
+VEC AG4_RndLightColor;
+
 /* Rendering system initialization function.
  * ARGUMENTS: None.
  * RETURNS: None.
  */
 VOID AG4_RndInit( VOID )
 {
-  AG4_RndMatrView = MatrView(VecSet1(23), VecSet1(0), VecSet(0, 1, 0));
+  AG4_RndMatrView = MatrView(VecSet1(25), VecSet1(0), VecSet(0, 1, 0));
+  AG4_RndLightPos = VecSet(20, 0, 20);
+  AG4_RndLightColor = VecSet(1, 1, 1);
   glEnable(GL_DEPTH_TEST);
   glClearColor(0, 0, 0, 1);
 } /* End of 'AG4_RndInit' function */

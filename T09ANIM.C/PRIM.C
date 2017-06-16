@@ -120,12 +120,21 @@ VOID AG4_RndPrimDraw( ag4PRIM *Pr, MATR M )
   glPrimitiveRestartIndex(-1);
 
   glUseProgram(AG4_RndProgId);
+
   loc = glGetUniformLocation(AG4_RndProgId, "MatrWVP");
   if (loc != -1)
     glUniformMatrix4fv(loc, 1, FALSE, WVP.M[0]);
   loc = glGetUniformLocation(AG4_RndProgId, "MatrW");
   if (loc != -1)
     glUniformMatrix4fv(loc, 1, FALSE, W.M[0]);
+  
+  loc = glGetUniformLocation(AG4_RndProgId, "LightPos");
+  if (loc != -1)
+    glUniform3fv(loc, 1, &AG4_RndLightPos.X);
+  loc = glGetUniformLocation(AG4_RndProgId, "LightColor");
+  if (loc != -1)
+    glUniform3fv(loc, 1, &AG4_RndLightColor.X);
+  
   loc = glGetUniformLocation(AG4_RndProgId, "Time");
   if (loc != -1)
     glUniform1f(loc, AG4_Anim.Time);
@@ -364,7 +373,7 @@ VOID AG4_RndGridEvalNormals( ag4VERTEX *V, INT N, INT M )
  *       INT N, M;
  * RETURNS: None.
  */
-/* VOID AG4_RndPrimCreatePlane( ag4PRIM *Pr, VEC C, VEC Du, VEC Dv, INT N, INT M )
+VOID AG4_RndPrimCreatePlane( ag4PRIM *Pr, VEC C, VEC Du, VEC Dv, INT N, INT M )
 {
   ag4VERTEX *V, *p;
   INT
@@ -379,19 +388,18 @@ VOID AG4_RndGridEvalNormals( ag4VERTEX *V, INT N, INT M )
   memset(V, 0, size);
   I = (INT *)(V + N * M);
 
-  /* Setup vertices *
+  /* Setup vertices */
   for (p = V, i = 0; i < N; i++)
     for (j = 0; j < M; j++, p++)
     {
       p->N = Norm;
-      p->P = VecAddVec(C,
-        VecAddVec(VecMulNum(Du, j / (M - 1.0)), VecMulNum(Dv, i / (N - 1.0))));
-      p->P.Y += 18 * sin(j * 13.0) * cos(i * 13.0) + Rnd1();
-      p->C = Vec4Set(0.18, 0.30, 0.08, 1);
+      p->P = VecAddVec(C, VecAddVec(VecMulNum(Du, j / (M - 1.0)), VecMulNum(Dv, i / (N - 1.0))));
+      p->P.Y += 2 * sin(j * 13.0) * cos(i * 13.0) ;
+      p->C = Vec4Set(1, 1, 1, 1);
       p->T = Vec2Set(j / (M - 1.0), i / (N - 1.0));
     }
 
-  /* Setup indices *
+  /* Setup indices */
   for (k = 0, v = 0, i = 0; i < N - 1; i++)
   {
     for (j = 0; j < M; j++, v++)
