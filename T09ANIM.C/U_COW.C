@@ -14,10 +14,14 @@
 typedef struct tagag4UNIT_COW
 {
   AG4_UNIT_BASE_FIELDS;
-  ag4PRIM Cow; /* Cow model1*/
+  ag4OBJ Cow; /* Cow model1*/
   FLT Rotate;   /* Cow rotate */
   VEC Pos;
 } ag4UNIT_COW;
+
+VEC 
+  AG4_RndObjMin,
+  AG4_RndObjMax;
 
 /* Cow drawing unit initialization function.
  * ARGUMENTS:
@@ -29,9 +33,9 @@ typedef struct tagag4UNIT_COW
  */
 static VOID AG4_UnitInit( ag4UNIT_COW *Uni, ag4ANIM *Ani )
 {
-  AG4_RndPrimLoad(&Uni->Cow, "cow.object");
+  AG4_RndObjLoad( &Uni->Cow, "cow.g3dm" );
   Uni->Pos = VecSet(rand() % 20 - 10, rand() % 20 - 10, rand() % 20 - 10);
-} /* End of 'VG4_UnitInit' function */
+} /* End of 'AG4_UnitInit' function */
 
 /* Cow drawing unit deinitialization function.
  * ARGUMENTS:
@@ -43,7 +47,7 @@ static VOID AG4_UnitInit( ag4UNIT_COW *Uni, ag4ANIM *Ani )
  */
 static VOID AG4_UnitClose( ag4UNIT_COW *Uni, ag4ANIM *Ani )
 {
-  AG4_RndPrimFree(&Uni->Cow);
+  AG4_RndObjFree(&Uni->Cow);
 } /* End of 'AG4_UnitClose' function */
 
 /* Cow drawing unit inter frame events handle function.
@@ -56,7 +60,12 @@ static VOID AG4_UnitClose( ag4UNIT_COW *Uni, ag4ANIM *Ani )
  */
 static VOID AG4_UnitResponse( ag4UNIT_COW *Uni, ag4ANIM *Ani )
 {
-  Uni->Rotate += Ani->GlobalDeltaTime * Ani->Keys[VK_LBUTTON] * Ani->Mdx * 102;
+  Uni->Rotate = 135;
+  Uni->Pos.X = 10 + Ani->Jx * 10;
+  Uni->Pos.Y = 0; /*fabs(Ani->Jz * 2);*/
+  Uni->Pos.Z = 10 - Ani->Jx * 10;
+
+  /*Uni->Rotate += Ani->GlobalDeltaTime * Ani->Keys[VK_LBUTTON] * Ani->Mdx * 102;
   Uni->Rotate += Ani->DeltaTime * Ani->Keys['A'] * 102;
   Uni->Rotate += -Ani->DeltaTime * Ani->Keys['D'] * 102;
   Uni->Pos.X += - Ani->DeltaTime * Ani->Keys[VK_LEFT] * 10 + Ani->DeltaTime * Ani->Keys[VK_RIGHT] * 10;
@@ -72,7 +81,7 @@ static VOID AG4_UnitResponse( ag4UNIT_COW *Uni, ag4ANIM *Ani )
     Uni->Pos.X = 0;
     Uni->Pos.Y = 0;
     Uni->Pos.Z = 0;
-  }
+  } */
 }
 /* Cow drawing unit render function.
  * ARGUMENTS:
@@ -88,7 +97,7 @@ static VOID AG4_UnitRender( ag4UNIT_COW *Uni, ag4ANIM *Ani )
   tmp.X += Ani->Mz / 60;
   tmp.Y += Ani->Mz / 60;
   tmp.Z += Ani->Mz / 60;
-  AG4_RndPrimDraw(&Uni->Cow, MatrMulMatr(MatrRotate(Uni->Rotate, VecSet(0, -1, 0)), MatrTranslate(tmp)));
+  AG4_RndObjDraw(&Uni->Cow, MatrMulMatr(MatrRotate(Uni->Rotate, VecSet(0, -1, 0)), MatrTranslate(tmp)));
 } /* End of 'AG4_UnitRender' function */
 
 /* Cow drawing unit creation function.
@@ -112,3 +121,4 @@ ag4UNIT *AG4_UnitCreateCow( VOID )
 } /* End of 'AG4_UnitCreateCow' function */
 
 /* END OF 'U_COW.C' FILE */
+ 

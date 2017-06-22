@@ -19,7 +19,6 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
   WNDCLASS wc;
   HWND hWnd;
   MSG msg;
-  INT i;
 
   wc.style = CS_VREDRAW | CS_HREDRAW; /* window style */
   wc.cbClsExtra = 0;
@@ -50,9 +49,8 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 
   /* Add units */
-  /* for (i = 0; i < AG4_MAX_UNITS; i++) */
-  for (i = 0; i < 1; i++)
-    AG4_AnimAddUnit(AG4_UnitCreateCow());
+  AG4_AnimAddUnit(AG4_UnitCreateGround());
+  AG4_AnimAddUnit(AG4_UnitCreateCow());
   AG4_AnimAddUnit(AG4_UnitCreateControl());
 
 

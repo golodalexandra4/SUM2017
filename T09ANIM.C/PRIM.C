@@ -28,6 +28,7 @@ VOID AG4_RndPrimCreate( ag4PRIM *Pr, BOOL IsTrimesh,
                         ag4VERTEX *V, INT NumOfV,
                         INT *I, INT NumOfI )
 {
+  memset(Pr, 0, sizeof(ag4PRIM));
   Pr->NumOfI = NumOfI;
   Pr->IsTrimesh = IsTrimesh;
   Pr->M = MatrIdentity();
@@ -77,7 +78,7 @@ VOID AG4_RndPrimCreate( ag4PRIM *Pr, BOOL IsTrimesh,
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(INT) * NumOfI, I, GL_STATIC_DRAW);
 
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-} /* End of 'AG4_RndPrimCreate' function */
+} /* Ens of 'AG4_RndPrimCreate' function */
 
 /* Free primitive function.
  * ARGUMENTS:
@@ -94,7 +95,7 @@ VOID AG4_RndPrimFree( ag4PRIM *Pr )
   glDeleteVertexArrays(1, &Pr->VA);
 
   glDeleteBuffers(1, &Pr->IBuf);
-} /* End of 'AG4_RndPrimFree' function */
+} /* Ens of 'AG4_RndPrimFree' function */
 
 /* Draw primitive function.
  * ARGUMENTS:
@@ -106,7 +107,7 @@ VOID AG4_RndPrimFree( ag4PRIM *Pr )
  */
 VOID AG4_RndPrimDraw( ag4PRIM *Pr, MATR M )
 {
-  INT loc;
+  INT loc, prg;
   MATR W, WVP;
 
   W = MatrMulMatr(Pr->M, M);
@@ -119,26 +120,29 @@ VOID AG4_RndPrimDraw( ag4PRIM *Pr, MATR M )
   glEnable(GL_PRIMITIVE_RESTART);
   glPrimitiveRestartIndex(-1);
 
-  glUseProgram(AG4_RndProgId);
-
-  loc = glGetUniformLocation(AG4_RndProgId, "MatrWVP");
+  prg = AG4_RndMaterialApply(Pr->MtlNo);
+  /// glUseProgram(AG4_RndProgId);
+  loc = glGetUniformLocation(prg, "MatrWVP");
   if (loc != -1)
     glUniformMatrix4fv(loc, 1, FALSE, WVP.M[0]);
-  loc = glGetUniformLocation(AG4_RndProgId, "MatrW");
+  loc = glGetUniformLocation(prg, "MatrW");
   if (loc != -1)
     glUniformMatrix4fv(loc, 1, FALSE, W.M[0]);
-  
-  loc = glGetUniformLocation(AG4_RndProgId, "LightPos");
+  loc = glGetUniformLocation(prg, "MatrV");
+  if (loc != -1)
+    glUniformMatrix4fv(loc, 1, FALSE, AG4_RndMatrView.M[0]);
+
+  loc = glGetUniformLocation(prg, "LightPos");
   if (loc != -1)
     glUniform3fv(loc, 1, &AG4_RndLightPos.X);
-  loc = glGetUniformLocation(AG4_RndProgId, "LightColor");
+  loc = glGetUniformLocation(prg, "LightColor");
   if (loc != -1)
     glUniform3fv(loc, 1, &AG4_RndLightColor.X);
-  
-  loc = glGetUniformLocation(AG4_RndProgId, "Time");
+
+  loc = glGetUniformLocation(prg, "Time");
   if (loc != -1)
     glUniform1f(loc, AG4_Anim.Time);
-  loc = glGetUniformLocation(AG4_RndProgId, "GTime");
+  loc = glGetUniformLocation(prg, "GTime");
   if (loc != -1)
     glUniform1f(loc, AG4_Anim.GlobalTime);
 
@@ -146,7 +150,7 @@ VOID AG4_RndPrimDraw( ag4PRIM *Pr, MATR M )
     Pr->NumOfI, GL_UNSIGNED_INT, NULL);
 
   glBindVertexArray(0);
-} /* End of 'AG4_RndPrimDraw' function */
+} /* Ens of 'AG4_RndPrimDraw' function */
 
 /* Primitive load function.
  * ARGUMENTS:
@@ -157,7 +161,7 @@ VOID AG4_RndPrimDraw( ag4PRIM *Pr, MATR M )
  * RETURNS:
  *   (BOOL) TRUE if success, FALSE otherwise.
  */
-BOOL AG4_RndPrimLoad( ag4PRIM *Pr, CHAR *FileName )
+BOOL AG4_RndPrimLoad( ag4PRIM *Obj, CHAR *FileName )
 {
   INT vn = 0, fn = 0, size;
   FILE *F;
@@ -165,7 +169,7 @@ BOOL AG4_RndPrimLoad( ag4PRIM *Pr, CHAR *FileName )
   INT *I;
   static CHAR Buf[1000];
 
-  memset(Pr, 0, sizeof(ag4PRIM));
+  memset(Obj, 0, sizeof(ag4PRIM));
   if ((F = fopen(FileName, "r")) == NULL)
     return FALSE;
 
@@ -219,7 +223,7 @@ BOOL AG4_RndPrimLoad( ag4PRIM *Pr, CHAR *FileName )
   fclose(F);
 
   AG4_RndTriMeshEvalNormals(V, vn, I, fn);
-  AG4_RndPrimCreate(Pr, TRUE, V, vn, I, fn);
+  AG4_RndPrimCreate(Obj, TRUE, V, vn, I, fn);
 
   free(V);
   return TRUE;
@@ -260,7 +264,7 @@ VOID AG4_RndTriMeshEvalNormals( ag4VERTEX *V, INT NumOfV, INT *I, INT NumOfI )
   /* Normalize all normals */
   for (i = 0; i < NumOfV; i++)
     V[i].N = VecNormalize(V[i].N);
-} /* End of 'VG4_RndTriMeshEvalNormals' function */
+} /* End of 'AG4_RndTriMeshEvalNormals' function */
 
 /* Evaluate grid vertex normals function.
  * ARGUMENTS:
@@ -319,14 +323,14 @@ VOID AG4_RndGridEvalNormals( ag4VERTEX *V, INT N, INT M )
  *       INT N, M;
  * RETURNS: None.
  */
-/* VOID AG4_RndPrimCreateSphere( ag4PRIM *Pr, VEC C, FLT R, INT N, INT M )
+VOID AG4_RndPrimCreateSphere( ag4PRIM *Pr, VEC C, FLT R, INT N, INT M )
 {
   ag4VERTEX *V, *p;
   INT
     i, j, k, v,
     *I,
     size = sizeof(ag4VERTEX) * N * M + sizeof(INT) * (M * 2 + 1) * (N - 1);
-  FLT theta, phi;
+  DBL theta, phi;
 
   memset(Pr, 0, sizeof(Pr));
   if ((V = malloc(size)) == NULL)
@@ -334,7 +338,7 @@ VOID AG4_RndGridEvalNormals( ag4VERTEX *V, INT N, INT M )
   memset(V, 0, size);
   I = (INT *)(V + N * M);
 
-  /* Setup vertices *
+  /* Setup vertices */
   for (p = V, theta = 0, i = 0; i < N; i++, theta += PI / (N - 1))
     for (phi = 0, j = 0; j < M; j++, phi += 2 * PI / (M - 1), p++)
     {
@@ -346,7 +350,7 @@ VOID AG4_RndGridEvalNormals( ag4VERTEX *V, INT N, INT M )
       p->T = Vec2Set(j / (M - 1.0), i / (N - 1.0));
     }
 
-  /* Setup indices *
+  /* Setup indices */
   for (k = 0, v = 0, i = 0; i < N - 1; i++)
   {
     for (j = 0; j < M; j++, v++)
@@ -373,7 +377,7 @@ VOID AG4_RndGridEvalNormals( ag4VERTEX *V, INT N, INT M )
  *       INT N, M;
  * RETURNS: None.
  */
-VOID AG4_RndPrimCreatePlane( ag4PRIM *Pr, VEC C, VEC Du, VEC Dv, INT N, INT M )
+VOID AG4_RndPrimCreatePlane( ag4OBJ *Pr, VEC C, VEC Du, VEC Dv, INT N, INT M )
 {
   ag4VERTEX *V, *p;
   INT
@@ -393,9 +397,10 @@ VOID AG4_RndPrimCreatePlane( ag4PRIM *Pr, VEC C, VEC Du, VEC Dv, INT N, INT M )
     for (j = 0; j < M; j++, p++)
     {
       p->N = Norm;
-      p->P = VecAddVec(C, VecAddVec(VecMulNum(Du, j / (M - 1.0)), VecMulNum(Dv, i / (N - 1.0))));
-      p->P.Y += 2 * sin(j * 13.0) * cos(i * 13.0) ;
-      p->C = Vec4Set(1, 1, 1, 1);
+      p->P = VecAddVec(C,
+        VecAddVec(VecMulNum(Du, j / (M - 1.0)), VecMulNum(Dv, i / (N - 1.0))));
+      //p->P.Y += 2 * sin(j * 13.0) * cos(i * 13.0);
+      p->C = Vec4Set(0.18, 0.30, 0.08, 1);
       p->T = Vec2Set(j / (M - 1.0), i / (N - 1.0));
     }
 
@@ -410,7 +415,7 @@ VOID AG4_RndPrimCreatePlane( ag4PRIM *Pr, VEC C, VEC Du, VEC Dv, INT N, INT M )
     I[k++] = -1;
   }
   AG4_RndGridEvalNormals(V, N, M);
-  AG4_RndPrimCreate(Pr, FALSE, V, N * M, I, (M * 2 + 1) * (N - 1));
+  AG4_RndObjCreate(Pr, 1);
 
   free(V);
 } /* Ens of 'AG4_RndPrimCreatePlane' function */

@@ -12,7 +12,7 @@
 
 #pragma comment(lib, "winmm")
 
-#define AG4_MAX_UNITS 9
+#define AG4_MAX_UNITS 1000
 
 #define AG4_GET_JOYSTICK_AXIS(A) \
   (2.0 * (ji.dw ## A ## pos - jc.w ## A ## min) / (jc.w ## A ## max - jc.w ## A ## min - 1) - 1)
@@ -74,7 +74,6 @@ BOOL AG4_AnimInit( HWND hWnd )
     return FALSE;
   }
  
-  AG4_RndProgId = AG4_RndShaderLoad("A");
   glEnable(GL_DEPTH_TEST);
   glClearColor(0.3, 0.5, 0.7, 1);
 
@@ -93,8 +92,7 @@ VOID AG4_AnimClose( VOID )
     free(AG4_Anim.Units[i]);
   }
 
-  AG4_RndShaderFree(AG4_RndProgId);
-  AG4_RndProgId = 0;
+  AG4_RndClose();
 
   /* Delete OpenGL data */
   wglMakeCurrent(NULL, NULL);
@@ -217,8 +215,13 @@ VOID AG4_AnimRender( VOID )
   /*** Update shader ***/
   if (AG4_Anim.GlobalTime - ShdTime > 2)
   {
-    AG4_RndShaderFree(AG4_RndProgId);
-    AG4_RndProgId = AG4_RndShaderLoad("A");
+    INT i;
+
+    for (i = 0; i < AG4_RndNumOfShaders; i++)
+    {
+      AG4_RndShaderFree(AG4_RndShaders[i].ProgId);
+      AG4_RndShaders[i].ProgId = AG4_RndShaderLoad(AG4_RndShaders[i].Name);
+    }
     ShdTime = AG4_Anim.GlobalTime;
   }
 

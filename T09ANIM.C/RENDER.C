@@ -20,9 +20,6 @@ MATR
   AG4_RndMatrView, /* Viewer matrix */
   AG4_RndMatrProj; /* Projection matrix */
 
-UINT
-  AG4_RndProgId;
-
 VEC AG4_RndLightPos;
 VEC AG4_RndLightColor;
 
@@ -32,12 +29,23 @@ VEC AG4_RndLightColor;
  */
 VOID AG4_RndInit( VOID )
 {
-  AG4_RndMatrView = MatrView(VecSet1(25), VecSet1(0), VecSet(0, 1, 0));
-  AG4_RndLightPos = VecSet(20, 0, 20);
+  AG4_RndMatrView = MatrView(VecSet1(20), VecSet1(0), VecSet(0, 1, 0));
+  AG4_RndLightPos = VecSet(-100, 20, 0);
   AG4_RndLightColor = VecSet(1, 1, 1);
   glEnable(GL_DEPTH_TEST);
-  glClearColor(0, 0, 0, 1);
+  glClearColor(0.5, 0.5, 0.5, 1);
+
+  AG4_RndResInit();
 } /* End of 'AG4_RndInit' function */
+
+/* Rendering system initialization function.
+ * ARGUMENTS: None.
+ * RETURNS: None.
+ */
+VOID AG4_RndClose( VOID )
+{
+  AG4_RndResClose();
+} /* End of 'AG4_RndClose' function */
 
 /* Project parameters adjust function.
  * ARGUMENTS: None.
@@ -57,6 +65,6 @@ VOID AG4_RndSetProj( VOID )
 
 /* Current shader */
 UINT
-  VG4_RndProgId;    /* Shader program identifier */
+  AG4_RndProgId;    /* Shader program identifier */
 
 /* END OF 'RENDER.C' FILE */

@@ -25,7 +25,7 @@ static VOID AG4_RndShaderLog( CHAR *Stage, CHAR *Text )
     fprintf(F, "%s: %s\n", Stage, Text);
     fclose(F);
   }
-} /* End of 'VG4_RndShaderLog' function */
+} /* End of 'AG4_RndShaderLog' function */
 
 /* Text file load to memory function.
  * ARGUMENTS:
@@ -153,7 +153,7 @@ UINT AG4_RndShaderLoad( CHAR *FileNamePrefix )
     return 0;
   }
   return prg;
-} /* End of 'AVG4_RndShaderLoad' function */
+} /* End of 'AG4_RndShaderLoad' function */
 
 /* Shader program load function.
  * ARGUMENTS:

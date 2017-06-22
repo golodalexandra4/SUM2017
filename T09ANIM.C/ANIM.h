@@ -10,14 +10,14 @@
 #include "def.h"
 #include "render.h"
 
-#define AG4_MAX_UNITS 9
+#define AG4_MAX_UNITS 1000
 #define AG4_UNIT_BASE_FIELDS \
   /* Unit initialization function.                \
    * ARGUMENTS:                                   \
    *   - self-pointer to unit object:             \
-   *       vg4UNIT *Uni;                          \
+   *       ag4UNIT *Uni;                          \
    *   - animation context:                       \
-   *       vg4ANIM *Ani;                          \
+   *       ag4ANIM *Ani;                          \
    * RETURNS: None.                               \
    */                                             \
   VOID (*Init)( ag4UNIT *Uni, ag4ANIM *Ani );     \
@@ -25,9 +25,9 @@
   /* Unit deinitialization function.              \
    * ARGUMENTS:                                   \
    *   - self-pointer to unit object:             \
-   *       vg4UNIT *Uni;                          \
+   *       ag4UNIT *Uni;                          \
    *   - animation context:                       \
-   *       vg4ANIM *Ani;                          \
+   *       ag4ANIM *Ani;                          \
    * RETURNS: None.                               \
    */                                             \
   VOID (*Close)( ag4UNIT *Uni, ag4ANIM *Ani );    \
@@ -35,9 +35,9 @@
   /* Unit inter frame events handle function.     \
    * ARGUMENTS:                                   \
    *   - self-pointer to unit object:             \
-   *       vg4UNIT *Uni;                          \
+   *       ag4UNIT *Uni;                          \
    *   - animation context:                       \
-   *       vg4ANIM *Ani;                          \
+   *       ag4ANIM *Ani;                          \
    * RETURNS: None.                               \
    */                                             \
   VOID (*Response)( ag4UNIT *Uni, ag4ANIM *Ani ); \
@@ -45,9 +45,9 @@
   /* Unit render function.                        \
    * ARGUMENTS:                                   \
    *   - self-pointer to unit object:             \
-   *       vg4UNIT *Uni;                          \
+   *       ag4UNIT *Uni;                          \
    *   - animation context:                       \
-   *       vg4ANIM *Ani;                          \
+   *       ag4ANIM *Ani;                          \
    * RETURNS: None.                               \
    */                                             \
   VOID (*Render)( ag4UNIT *Uni, ag4ANIM *Ani )

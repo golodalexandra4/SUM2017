@@ -258,6 +258,10 @@
 				Name="Shaders"
 				>
 				<File
+					RelativePath=".\MATERIAL.C"
+					>
+				</File>
+				<File
 					RelativePath=".\SHADERS.C"
 					>
 				</File>

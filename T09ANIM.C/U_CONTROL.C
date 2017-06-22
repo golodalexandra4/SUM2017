@@ -15,6 +15,10 @@
 typedef struct tagag4UNIT_CONTROL
 {
   AG4_UNIT_BASE_FIELDS;
+  ag4OBJ Cactus;
+  VEC Pos;
+  FLT Rotate;
+  DBL TimeShift;
 } ag4UNIT_CONTROL;
 
 /* Control unit initialization function.
@@ -27,6 +31,17 @@ typedef struct tagag4UNIT_CONTROL
  */
 static VOID AG4_UnitInit( ag4UNIT_CONTROL *Uni, ag4ANIM *Ani )
 {
+  VEC place[3];
+  INT r = (INT)rand() % 3;
+
+  Uni->TimeShift = 1;
+
+  place[0] = VecSet(-10, 0, -30);
+  place[1] = VecSet(-20, 0, -20);
+  place[2] = VecSet(-30, 0, -10);
+  AG4_RndObjLoad( &Uni->Cactus, "models\\cactus.g3dm" );
+  Uni->Pos = place[r];
+
 } /* End of 'AG4_UnitInit' function */
 
 /* Control unit deinitialization function.
@@ -39,6 +54,7 @@ static VOID AG4_UnitInit( ag4UNIT_CONTROL *Uni, ag4ANIM *Ani )
  */
 static VOID AG4_UnitClose( ag4UNIT_CONTROL *Uni, ag4ANIM *Ani )
 {
+  AG4_RndObjFree(&Uni->Cactus);
 } /* End of 'AG4_UnitClose' function */
 
 /* Control unit inter frame events handle function.
@@ -51,11 +67,13 @@ static VOID AG4_UnitClose( ag4UNIT_CONTROL *Uni, ag4ANIM *Ani )
  */
 static VOID AG4_UnitResponse( ag4UNIT_CONTROL *Uni, ag4ANIM *Ani )
 {
-  static BOOL abrakadabra = FALSE;
-  if (!abrakadabra)
+  static BOOL counter = FALSE;
+  static DBL OldCactusTime = 0;
+  
+  if (!counter)
   {  
     AG4_AnimAddUnit(AG4_UnitCreateGround());
-    abrakadabra = !abrakadabra;
+    counter = !counter;
   }
 
   if (Ani->KeysClick[VK_ESCAPE])
@@ -76,6 +94,23 @@ static VOID AG4_UnitResponse( ag4UNIT_CONTROL *Uni, ag4ANIM *Ani )
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
   else if (Ani->JButClick[0])
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+  if (Ani->Time - OldCactusTime > Uni->TimeShift)
+  {
+    OldCactusTime = Ani->Time;
+    Uni->TimeShift = rand() % 5 + 10;
+    AG4_AnimAddUnit(AG4_UnitCreateControl());
+  }
+  
+  Uni->Pos.X += Ani->Time / 1000;
+  Uni->Pos.Z += Ani->Time / 1000;
+  
+  if (Ani->JButClick[6])
+  {  
+    Uni->Pos.X = 0;
+    Uni->Pos.Y = 0;
+    Uni->Pos.Z = 0;
+  } 
 } /* End of 'AG4_UnitResponse' function */
 
 /* Control unit render function.
@@ -90,6 +125,7 @@ static VOID AG4_UnitRender( ag4UNIT_CONTROL *Uni, ag4ANIM *Ani )
 {
   INT len;
   static CHAR Buf[100];
+  VEC tmp = Uni->Pos;
 
   len = sprintf(Buf, "FPS: %.5f, Units: %d, M: (%d,%d) [%d,%d] %d "
     "J: %.3f %.3f %.3f %.3f",
@@ -99,6 +135,16 @@ static VOID AG4_UnitRender( ag4UNIT_CONTROL *Uni, ag4ANIM *Ani )
 
   SetWindowText(Ani->hWnd, Buf);
 
+  tmp.X += Ani->Mz / 60;
+  tmp.Y += Ani->Mz / 60;
+  tmp.Z += Ani->Mz / 60;
+  AG4_RndObjDraw(&Uni->Cactus, MatrMulMatr(MatrRotate(Uni->Rotate, VecSet(0, -1, 0)), MatrTranslate(tmp)));
+
+  /*if (Uni->Pos.Z > 100)
+  {
+    AG4_RndObjFree(&Uni->Cactus);
+    Ani->NumOfUnits--;
+  } */
 } /* End of 'AG4_UnitRender' function */
 
 /* Control unit creation function.

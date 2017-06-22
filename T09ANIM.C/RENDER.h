@@ -14,6 +14,10 @@
 #include <gl/glu.h>
 #include "def.h"
 
+#define AG4_RES_TABLE_SIZE 1000
+
+#define AG4_MATERIAL_NAME_SIZE 300
+
 /* Project parameters */
 extern FLT
   AG4_RndProjDist, /* Distance from viewer to project plane */
@@ -24,10 +28,7 @@ extern MATR
   AG4_RndMatrView, /* Viewer matrix */
   AG4_RndMatrProj; /* Projection matrix */
 
-/* Current shader */
-extern UINT
-  AG4_RndProgId;    /* Shader program identifier */
-
+/* Light position and color */
 extern VEC AG4_RndLightPos;
 extern VEC AG4_RndLightColor;
 
@@ -36,6 +37,12 @@ extern VEC AG4_RndLightColor;
  * RETURNS: None.
  */
 VOID AG4_RndInit( VOID );
+
+/* Rendering system initialization function.
+ * ARGUMENTS: None.
+ * RETURNS: None.
+ */
+VOID AG4_RndClose( VOID );
 
 /* Project parameters adjust function.
  * ARGUMENTS: None.
@@ -47,6 +54,43 @@ VOID AG4_RndSetProj( VOID );
  * Object handle
  ***/
 
+/* Materials table */
+typedef struct tagag4MATERIAL
+{
+  CHAR Name[AG4_MATERIAL_NAME_SIZE]; /* Material name */
+
+  /* Illumination coefficients */ 
+  VEC Ka, Kd, Ks;                    /* Ambient, diffuse, specular coefficients */
+  FLT Ph;                            /* Phong power coefficient */
+  FLT Trans;                         /* Transparency factor */
+  INT Tex[8];                        /* Texture references */
+
+  /* Shader string */
+  CHAR ShaderStr[AG4_MATERIAL_NAME_SIZE];
+  INT Shader;                        /* Texture references */
+} ag4MATERIAL;
+extern ag4MATERIAL AG4_RndMaterials[AG4_RES_TABLE_SIZE];
+extern INT AG4_RndNumOfMaterials;
+
+/* Textures table */
+typedef struct tagag4TEXTURE
+{
+  CHAR Name[AG4_MATERIAL_NAME_SIZE]; /* Texture file name */
+  INT W, H;                          /* Texture image size */
+  UINT TexId;                        /* Texture ID */
+} ag4TEXTURE;
+extern ag4TEXTURE AG4_RndTextures[AG4_RES_TABLE_SIZE];
+extern INT AG4_RndNumOfTextures;
+
+/* Shaders table */
+/* Shader store representation type */
+typedef struct tagag4SHADER
+{
+  CHAR Name[AG4_MATERIAL_NAME_SIZE]; /* Shader file name prefix */
+  UINT ProgId;                       /* Shader program ID */
+} ag4SHADER;
+extern ag4SHADER AG4_RndShaders[AG4_RES_TABLE_SIZE];
+extern INT AG4_RndNumOfShaders;
 
 typedef struct tagag4VERTEX
 {
@@ -66,6 +110,9 @@ typedef struct tagag4PRIM
   INT VA, VBuf;
   /* Index Buffer */
   INT IBuf;
+  INT MtlNo;
+  /* primitive dimensions */
+  VEC MinV, MaxV;
 } ag4PRIM;
 
 typedef struct tagag4OBJ
@@ -77,7 +124,7 @@ typedef struct tagag4OBJ
 /* Object free memory function.
  * ARGUMENTS:
  *   - object pointer:
- *       vg4OBJ3D *Obj;
+ *       ag4OBJ3D *Obj;
  * RETURNS: None.
  */
 VOID AG4_RndObjFree( ag4OBJ *Obj );
@@ -190,7 +237,7 @@ VOID AG4_RndPrimCreateSphere( ag4PRIM *Pr, VEC C, FLT R, INT N, INT M );
  *       INT N, M;
  * RETURNS: None.
  */
-VOID AG4_RndPrimCreatePlane( ag4PRIM *Pr, VEC C, VEC Du, VEC Dv, INT N, INT M );
+VOID AG4_RndPrimCreatePlane( ag4OBJ *Pr, VEC C, VEC Du, VEC Dv, INT N, INT M );
 
 /* Text file load to memory function.
  * ARGUMENTS:
@@ -201,6 +248,65 @@ VOID AG4_RndPrimCreatePlane( ag4PRIM *Pr, VEC C, VEC Du, VEC Dv, INT N, INT M );
  */
 UINT AG4_RndShaderLoad( CHAR *FileNamePrefix );
 VOID AG4_RndShaderFree( UINT Prg );
+
+/* Resourcse initialization function.
+ * ARGUMENTS: None.
+ * RETURNS: None.
+ */
+VOID AG4_RndResInit( VOID );
+
+/* Resourcse deinitialization function.
+ * ARGUMENTS: None.
+ * RETURNS: None.
+ */
+VOID AG4_RndResClose( VOID );
+
+/* Add shader function.
+ * ARGUMENTS:
+ *   - shader file name prefix:
+ *       CHAR *FileNamePrefix;
+ * RETURNS:
+ *   (INT) shader table number.
+ */
+INT AG4_RndShaderAdd( CHAR *FileNamePrefix );
+
+/* Add material function.
+ * ARGUMENTS:
+ *   - material data:
+ *       ag4MATERIAL *Mtl;
+ * RETURNS:
+ *   (INT) material table number.
+ */
+INT AG4_RndMaterialAdd( ag4MATERIAL *Mtl );
+
+/* Add texture function.
+ * ARGUMENTS:
+ *   - texture name:
+ *       CHAR *Name;
+ *   - texture image size:
+ *       INT W, H;
+ *   - texture image pixel number of component:
+ *       INT Components;
+ *   - texture image pixel color data:
+ *       VOID *Data;
+ * RETURNS:
+ *   (INT) texture table number.
+ */
+INT AG4_RndTextureAdd( CHAR *Name, INT W, INT H, INT Components, VOID *Data );
+
+/* Material apply function.
+ * ARGUMENTS:
+ *   - material table number:
+ *       INT MtlNo;
+ * RETURNS:
+ *   (UINT) shader program Id.
+ */
+UINT AG4_RndMaterialApply( INT MtlNo );
+
+VOID AG4_RndObjCreate( ag4OBJ *Obj, INT NumOfP );
+VOID AG4_RndObjFree( ag4OBJ *Obj );
+VOID AG4_RndObjDraw( ag4OBJ *Obj, MATR M );
+BOOL AG4_RndObjLoad( ag4OBJ *Obj, CHAR *FileName );
 
 #endif /* __RENDER_H_ */
 
