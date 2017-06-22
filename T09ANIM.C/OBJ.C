@@ -74,7 +74,7 @@ BOOL AG4_RndObjLoad( ag4OBJ *Obj, CHAR *FileName )
 {
   FILE *F;
   DWORD Sign;
-  INT NoofP = 0, NoofM = 0, NoofT = 0, i;
+  INT NoofP = 0, NoofM = 0, NoofT = 0, i, k;
   VEC max, min;
 
   memset(Obj, 0, sizeof(ag4OBJ));
@@ -126,14 +126,34 @@ BOOL AG4_RndObjLoad( ag4OBJ *Obj, CHAR *FileName )
     fread(V, 1, size, F);
     I = (INT *)(V + nv);
     AG4_RndPrimCreate(&Obj->P[i], TRUE, V, nv, I, ni);
+    
+    /* Found dimensions of primitive */
+    min = max = V[0].P;
+    for (k = 0; k < nv; k++)
+    {
+      if (min.X > V[k].P.X)
+        min.X = V[k].P.X;
+      if (min.Y > V[k].P.Y)
+        min.Y = V[k].P.Y;
+      if (min.Z > V[k].P.Z)
+        min.Z = V[k].P.Z;
+      
+      if (max.X < V[k].P.X)
+        max.X = V[k].P.X;
+      if (max.Y < V[k].P.Y)
+        max.Y = V[k].P.Y;
+      if (max.Z < V[k].P.Z)
+        max.Z = V[k].P.Z;
+    }
+
     free(V);
     if (mtl_no != -1)
       mtl_no += AG4_RndNumOfMaterials;
     Obj->P[i].MtlNo = mtl_no;
   }
 
-  /* Found dimensions of primitive */
-  /* min = max = */
+  Obj->MaxV = max;
+  Obj->MinV = min;
 
   /* Load materials */
   fread(&AG4_RndMaterials[AG4_RndNumOfMaterials], sizeof(ag4MATERIAL), NoofM, F);

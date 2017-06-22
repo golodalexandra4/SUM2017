@@ -19,6 +19,7 @@ typedef struct tagag4UNIT_CONTROL
   VEC Pos;
   FLT Rotate;
   DBL TimeShift;
+  INT Number; /* Number of unit in array of units */
 } ag4UNIT_CONTROL;
 
 /* Control unit initialization function.
@@ -40,6 +41,7 @@ static VOID AG4_UnitInit( ag4UNIT_CONTROL *Uni, ag4ANIM *Ani )
   place[1] = VecSet(-20, 0, -20);
   place[2] = VecSet(-30, 0, -10);
   AG4_RndObjLoad( &Uni->Cactus, "models\\cactus.g3dm" );
+  Uni->Number = AG4_Register(&Uni->Cactus);
   Uni->Pos = place[r];
 
 } /* End of 'AG4_UnitInit' function */
@@ -69,12 +71,16 @@ static VOID AG4_UnitResponse( ag4UNIT_CONTROL *Uni, ag4ANIM *Ani )
 {
   static BOOL counter = FALSE;
   static DBL OldCactusTime = 0;
+  static BOOL cow_counter = FALSE;
   
   if (!counter)
   {  
     AG4_AnimAddUnit(AG4_UnitCreateGround());
     counter = !counter;
   }
+
+  if(!cow_counter)
+    AG4_AnimAddUnit(AG4_UnitCreateCow()), cow_counter = !cow_counter;
 
   if (Ani->KeysClick[VK_ESCAPE])
     AG4_AnimDoExit();
@@ -101,15 +107,22 @@ static VOID AG4_UnitResponse( ag4UNIT_CONTROL *Uni, ag4ANIM *Ani )
     Uni->TimeShift = rand() % 5 + 10;
     AG4_AnimAddUnit(AG4_UnitCreateControl());
   }
-  
-  Uni->Pos.X += Ani->Time / 1000;
-  Uni->Pos.Z += Ani->Time / 1000;
-  
+
+  Uni->Pos.X += Ani->Time / 400;
+  Uni->Pos.Z += Ani->Time / 400;
+
   if (Ani->JButClick[6])
-  {  
+  {
     Uni->Pos.X = 0;
     Uni->Pos.Y = 0;
     Uni->Pos.Z = 0;
+  }
+
+  /* Checking collision */
+  if (AG4_IsColide(&Uni->Cactus))
+  {
+    AG4_Reset(Uni->Number - 1);
+    AG4_RndObjFree(&Uni->Cactus);
   } 
 } /* End of 'AG4_UnitResponse' function */
 
@@ -167,4 +180,9 @@ ag4UNIT * AG4_UnitCreateControl( VOID )
   return (ag4UNIT *)Uni;
 } /* End of 'AG4_UnitCreateControl' function */
 
-/* END OF 'U_CONTR.C' FILE */
+BOOL AG4_RndFoundCollision( ag4UNIT_CONTROL *UniCactus )
+{
+  return FALSE;
+}
+
+/* END OF 'U_CONTROL.C' FILE */

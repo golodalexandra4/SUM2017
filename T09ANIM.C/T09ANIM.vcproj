@@ -218,6 +218,10 @@
 				Name="Unit Samples"
 				>
 				<File
+					RelativePath=".\COLLISION.C"
+					>
+				</File>
+				<File
 					RelativePath=".\U_CONTROL.C"
 					>
 				</File>

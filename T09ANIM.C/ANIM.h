@@ -96,6 +96,9 @@ struct tagag4ANIM
 extern ag4ANIM AG4_Anim;
 extern INT AG4_MouseWheel;
 
+
+extern ag4OBJ *ColObj[AG4_MAX_UNITS];
+
 ag4UNIT *AG4_AnimUnitCreate( INT Size );
 
 BOOL AG4_AnimInit( HWND hWnd );

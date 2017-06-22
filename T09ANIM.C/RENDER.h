@@ -111,14 +111,14 @@ typedef struct tagag4PRIM
   /* Index Buffer */
   INT IBuf;
   INT MtlNo;
-  /* primitive dimensions */
-  VEC MinV, MaxV;
 } ag4PRIM;
 
 typedef struct tagag4OBJ
 {
   ag4PRIM *P;
   INT NumOfP;
+  /* object dimensions */
+  VEC MinV, MaxV;
 } ag4OBJ;
 
 /* Object free memory function.
@@ -307,6 +307,13 @@ VOID AG4_RndObjCreate( ag4OBJ *Obj, INT NumOfP );
 VOID AG4_RndObjFree( ag4OBJ *Obj );
 VOID AG4_RndObjDraw( ag4OBJ *Obj, MATR M );
 BOOL AG4_RndObjLoad( ag4OBJ *Obj, CHAR *FileName );
+
+/* Collision functions */
+VOID AG4_Reset( INT N );
+INT AG4_Register( ag4OBJ *Obj );
+BOOL AG4_IsColide( ag4OBJ *Obj );
+VOID Swap( ag4OBJ *Obj1, ag4OBJ *Obj2 );
+VOID AG4_CowNumber( INT N );
 
 #endif /* __RENDER_H_ */
 

@@ -10,6 +10,11 @@
 
 #include "units.h"
 
+/* cow dementions */
+VEC 
+  AG4_CowMinVec,
+  AG4_CowMaxVec;
+
 /* Animation unit representation type */
 typedef struct tagag4UNIT_COW
 {
@@ -17,6 +22,7 @@ typedef struct tagag4UNIT_COW
   ag4OBJ Cow; /* Cow model1*/
   FLT Rotate;   /* Cow rotate */
   VEC Pos;
+  INT Number; /* Number in array of units */
 } ag4UNIT_COW;
 
 VEC 
@@ -34,6 +40,9 @@ VEC
 static VOID AG4_UnitInit( ag4UNIT_COW *Uni, ag4ANIM *Ani )
 {
   AG4_RndObjLoad( &Uni->Cow, "cow.g3dm" );
+  
+  Uni->Number = AG4_Register(&Uni->Cow);
+  AG4_CowNumber(Uni->Number);
   Uni->Pos = VecSet(rand() % 20 - 10, rand() % 20 - 10, rand() % 20 - 10);
 } /* End of 'AG4_UnitInit' function */
 

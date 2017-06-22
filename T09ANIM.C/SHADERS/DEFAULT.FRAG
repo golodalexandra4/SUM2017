@@ -21,7 +21,7 @@ layout(binding = 0) uniform sampler2D Texture0;
 vec3 Shade( vec3 P, vec3 N )
 {
   // Resut color
-  vec3 color = vec3(0, 0.4, 0.4);
+  vec3 color = vec3(62 / 256.0, 180 / 256.0, 137 / 256.0);
 
   vec3 V = -transpose(MatrV)[2].xyz;
   // Correct normal
@@ -31,6 +31,7 @@ vec3 Shade( vec3 P, vec3 N )
 
   // Ambient
   //vec3 Ka = vec3(0.1, 0.1, 0.1);
+  //Ka = vec3(0.2, 0.2, 0.2);
   color += Ka;
 
   // Diffuse
@@ -40,11 +41,13 @@ vec3 Shade( vec3 P, vec3 N )
   //return Kds;
   vec3 L = normalize(LightPos - P);
   float nl = dot(L, N);
+  //Kds = vec3(0.8, 0.8, 0.8);
   color += Kds * LightColor * max(nl, 0);
 
   // Specular
   vec3 R = reflect(V, N);
   float rl = dot(L, R);
+  //Ks = vec3(0.1, 0.1, 0.1);
   color += Ks * max(pow(rl, Ph), 0);
   return color;
 }

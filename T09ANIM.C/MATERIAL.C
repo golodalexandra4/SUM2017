@@ -197,7 +197,7 @@ UINT AG4_RndMaterialApply( INT MtlNo )
     if (t != -1)
     {
       glActiveTexture(GL_TEXTURE0 + i);
-      glBindTexture(GL_TEXTURE_2D, AG4_RndTextures[t].TexId);
+//      glBindTexture(GL_TEXTURE_2D, AG4_RndTextures[t].TexId);
     }
   }
   return prg;
