@@ -107,7 +107,7 @@ static VOID AG4_UnitRender( ag4UNIT_COW *Uni, ag4ANIM *Ani )
   tmp.X += Ani->Mz / 60;
   tmp.Y += Ani->Mz / 60;
   tmp.Z += Ani->Mz / 60;
-  Uni->Cow.MaxV = VecMulMatr3(Uni->Cow.MaxV, MatrMulMatr(MatrRotate(Uni->Rotate, VecSet(0, -1, 0)), MatrTranslate(tmp)));
+  //Uni->Cow.MaxV = VecMulMatr3(Uni->Cow.MaxV, MatrMulMatr(MatrRotate(Uni->Rotate, VecSet(0, -1, 0)), MatrTranslate(tmp)));
   AG4_RndObjDraw(&Uni->Cow, MatrMulMatr(MatrRotate(Uni->Rotate, VecSet(0, -1, 0)), MatrTranslate(tmp)));
 } /* End of 'AG4_UnitRender' function */
 
