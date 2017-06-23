@@ -71,7 +71,7 @@ static VOID AG4_UnitResponse( ag4UNIT_COW *Uni, ag4ANIM *Ani )
 {
   Uni->Rotate = 135;
   Uni->Pos.X = 10 + Ani->Jx * 10;
-  Uni->Pos.Y = 0; /*fabs(Ani->Jz * 2);*/
+  Uni->Pos.Y = 0;
   Uni->Pos.Z = 10 - Ani->Jx * 10;
 
   /*Uni->Rotate += Ani->GlobalDeltaTime * Ani->Keys[VK_LBUTTON] * Ani->Mdx * 102;
@@ -92,6 +92,7 @@ static VOID AG4_UnitResponse( ag4UNIT_COW *Uni, ag4ANIM *Ani )
     Uni->Pos.Z = 0;
   } */
 }
+
 /* Cow drawing unit render function.
  * ARGUMENTS:
  *   - self-pointer to unit object:
@@ -106,6 +107,7 @@ static VOID AG4_UnitRender( ag4UNIT_COW *Uni, ag4ANIM *Ani )
   tmp.X += Ani->Mz / 60;
   tmp.Y += Ani->Mz / 60;
   tmp.Z += Ani->Mz / 60;
+  Uni->Cow.MaxV = VecMulMatr3(Uni->Cow.MaxV, MatrMulMatr(MatrRotate(Uni->Rotate, VecSet(0, -1, 0)), MatrTranslate(tmp)));
   AG4_RndObjDraw(&Uni->Cow, MatrMulMatr(MatrRotate(Uni->Rotate, VecSet(0, -1, 0)), MatrTranslate(tmp)));
 } /* End of 'AG4_UnitRender' function */
 

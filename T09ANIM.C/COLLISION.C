@@ -32,21 +32,13 @@ BOOL AG4_IsColide( ag4OBJ *Obj )
 {
   INT numer = AG4_Register(Obj);
   
-  if (ColObj[NumOfCow]->MaxV.X < ColObj[numer - 1]->MinV.X)
+  if (ColObj[NumOfCow]->MaxV.X > ColObj[numer - 1]->MinV.X || 
+      ColObj[NumOfCow]->MaxV.Z > ColObj[numer - 1]->MinV.Z || 
+      ColObj[NumOfCow]->MinV.X < ColObj[numer - 1]->MaxV.X || 
+      ColObj[NumOfCow]->MinV.Z < ColObj[numer - 1]->MaxV.Z)
     return FALSE;
-  if (ColObj[NumOfCow]->MaxV.Y < ColObj[numer - 1]->MinV.Y)
-    return FALSE;
-  if (ColObj[NumOfCow]->MaxV.Z < ColObj[numer - 1]->MinV.Z)
-    return FALSE;
-
-  if (ColObj[NumOfCow]->MinV.X > ColObj[numer - 1]->MaxV.X)
-    return FALSE;
-  if (ColObj[NumOfCow]->MinV.Y > ColObj[numer - 1]->MaxV.Y)
-    return FALSE;
-  if (ColObj[NumOfCow]->MinV.Z > ColObj[numer - 1]->MaxV.Z)
-    return FALSE;
-
-  return TRUE;
+  else
+    return TRUE;
 }
 
 VOID AG4_CowNumber( INT N )

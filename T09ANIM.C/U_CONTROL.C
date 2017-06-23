@@ -111,6 +111,13 @@ static VOID AG4_UnitResponse( ag4UNIT_CONTROL *Uni, ag4ANIM *Ani )
   Uni->Pos.X += Ani->Time / 400;
   Uni->Pos.Z += Ani->Time / 400;
 
+  /* Checking collision
+  if (AG4_IsColide(&Uni->Cactus))
+  {
+    AG4_Reset(Uni->Number - 1);
+    //AG4_RndObjFree(&Uni->Cactus);
+  }*/
+
   if (Ani->JButClick[6])
   {
     Uni->Pos.X = 0;
@@ -118,12 +125,6 @@ static VOID AG4_UnitResponse( ag4UNIT_CONTROL *Uni, ag4ANIM *Ani )
     Uni->Pos.Z = 0;
   }
 
-  /* Checking collision */
-  if (AG4_IsColide(&Uni->Cactus))
-  {
-    AG4_Reset(Uni->Number - 1);
-    AG4_RndObjFree(&Uni->Cactus);
-  } 
 } /* End of 'AG4_UnitResponse' function */
 
 /* Control unit render function.
@@ -151,7 +152,15 @@ static VOID AG4_UnitRender( ag4UNIT_CONTROL *Uni, ag4ANIM *Ani )
   tmp.X += Ani->Mz / 60;
   tmp.Y += Ani->Mz / 60;
   tmp.Z += Ani->Mz / 60;
+  Uni->Cactus.MaxV = VecMulMatr3(Uni->Cactus.MaxV, MatrMulMatr(MatrRotate(Uni->Rotate, VecSet(0, -1, 0)), MatrTranslate(tmp)));
   AG4_RndObjDraw(&Uni->Cactus, MatrMulMatr(MatrRotate(Uni->Rotate, VecSet(0, -1, 0)), MatrTranslate(tmp)));
+
+  /* Checking collision */
+  if (AG4_IsColide(&Uni->Cactus))
+  {
+    AG4_Reset(Uni->Number - 1);
+    AG4_RndObjFree(&Uni->Cactus);
+  }
 
   /*if (Uni->Pos.Z > 100)
   {
@@ -179,10 +188,5 @@ ag4UNIT * AG4_UnitCreateControl( VOID )
   Uni->Render = (VOID *)AG4_UnitRender;
   return (ag4UNIT *)Uni;
 } /* End of 'AG4_UnitCreateControl' function */
-
-BOOL AG4_RndFoundCollision( ag4UNIT_CONTROL *UniCactus )
-{
-  return FALSE;
-}
 
 /* END OF 'U_CONTROL.C' FILE */
