@@ -237,7 +237,7 @@ VOID AG4_RndPrimCreateSphere( ag4PRIM *Pr, VEC C, FLT R, INT N, INT M );
  *       INT N, M;
  * RETURNS: None.
  */
-VOID AG4_RndPrimCreatePlane( ag4OBJ *Pr, VEC C, VEC Du, VEC Dv, INT N, INT M );
+VOID AG4_RndPrimCreatePlane( ag4PRIM *Pr, VEC C, VEC Du, VEC Dv, INT N, INT M );
 
 /* Text file load to memory function.
  * ARGUMENTS:

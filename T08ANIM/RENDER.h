@@ -11,13 +11,13 @@
 
 /* Project parameters */
 extern DBL
-  AG4_RndWp,       /* Project plane width */
-  AG4_RndHp,       /* Project plane height */
   AG4_RndProjDist, /* Distance from viewer to project plane */
-  AG4_RndProjSize; /* Prohect plane inner size */
+  AG4_RndProjSize, /* Prohect plane inner size */
+  AG4_RndProjFarClip; /*  */
 
 extern MATR
-  AG4_RndMatrView; /* Viewer matrix */
+  AG4_RndMatrView, /* Viewer matrix */
+  AG4_RndMatrProj; /* Projection matrix */
 
 /* Rendering system initialization function.
  * ARGUMENTS: None.

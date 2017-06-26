@@ -76,4 +76,3 @@ void Swap( int *A, int *B ) /* change two elements */
   *A = *B;
   *B = tmp;
 }
-                                                     

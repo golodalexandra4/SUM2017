@@ -49,7 +49,9 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 
   /* Add units */
-  AG4_AnimAddUnit(AG4_UnitCreateControl());
+  /// AG4_AnimAddUnit(AG4_UnitCreateControl());
+  AG4_AnimAddUnit(AG4_UnitCreateCow());
+  AG4_AnimAddUnit(AG4_UnitCreateGround());
 
 
   while (TRUE)

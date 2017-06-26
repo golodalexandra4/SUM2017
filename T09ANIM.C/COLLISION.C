@@ -32,10 +32,10 @@ BOOL AG4_IsColide( ag4OBJ *Obj )
 {
   INT numer = AG4_Register(Obj);
   
-  if (ColObj[NumOfCow - 1]->MaxV.X > ColObj[numer - 1]->MinV.X || 
-      ColObj[NumOfCow - 1]->MaxV.Z > ColObj[numer - 1]->MinV.Z || 
-      ColObj[NumOfCow - 1]->MinV.X < ColObj[numer - 1]->MaxV.X || 
-      ColObj[NumOfCow - 1]->MinV.Z < ColObj[numer - 1]->MaxV.Z)
+  if ((ColObj[NumOfCow - 1]->MaxV.X > ColObj[numer - 1]->MinV.X || 
+       ColObj[NumOfCow - 1]->MaxV.Z > ColObj[numer - 1]->MinV.Z) || 
+      (ColObj[NumOfCow - 1]->MinV.X < ColObj[numer - 1]->MaxV.X || 
+       ColObj[NumOfCow - 1]->MinV.Z < ColObj[numer - 1]->MaxV.Z))
     return FALSE;
   else
     return TRUE;

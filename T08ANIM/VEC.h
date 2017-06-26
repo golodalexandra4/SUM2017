@@ -358,6 +358,22 @@ __inline MATR MatrView( VEC Loc, VEC At, VEC Up1 )
   return m;
 } /* End of 'MatrView' function */
 
+__inline MATR MatrFrustum( DBL left, DBL right, DBL bottom, DBL top, DBL ProgectDist, DBL FarClip)
+{
+  MATR M = UnitMatrix;
+
+  M.M[0][0] = 2 * ProgectDist / (right - left);
+  M.M[2][0] = (right + left) / (right - left);
+  M.M[1][1] = 2 * ProgectDist / (top - bottom);
+  M.M[2][1] = (top + bottom) / (top - bottom);
+  M.M[2][2] = (ProgectDist + FarClip) / (ProgectDist - FarClip);
+  M.M[3][2] = 2 * ProgectDist * FarClip / (ProgectDist - FarClip);
+  M.M[2][3] = -1;
+  M.M[3][3] = 0;
+
+  return M;
+}
+
 #endif 
 
 /* end of 'VEC.H' file '*/

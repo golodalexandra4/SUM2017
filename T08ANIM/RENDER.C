@@ -8,13 +8,13 @@
 
 /* Project parameters */
 DBL
-  AG4_RndWp,       /* Project plane width */
-  AG4_RndHp,       /* Project plane height */
-  AG4_RndProjDist, /* Distance from viewer to project plane */
-  AG4_RndProjSize; /* Prohect plane inner size */
+  AG4_RndProjSize = 1, /* Prohect plane inner size */
+  AG4_RndProjDist = 1, /* Distance from viewer to project plane */
+  AG4_RndProjFarClip = 1000; /*  */
 
 MATR
-  AG4_RndMatrView; /* Viewer matrix */
+  AG4_RndMatrView, /* Viewer matrix */
+  AG4_RndMatrProj; /* Projection matrix */
 
 /* Rendering system initialization function.
  * ARGUMENTS: None.
@@ -22,13 +22,8 @@ MATR
  */
 VOID AG4_RndInit( VOID )
 {
-  AG4_RndWp = 1;
-  AG4_RndHp = 1;
-  AG4_RndProjDist = 1;
-  AG4_RndProjSize = 1;
-
   AG4_RndMatrView = MatrView(VecSet1(23), VecSet1(0), VecSet(0, 1, 0));
-} /* End of 'VG4_RndInit' function */
+} /* End of 'AG4_RndInit' function */
 
 /* Project parameters adjust function.
  * ARGUMENTS: None.
@@ -36,12 +31,14 @@ VOID AG4_RndInit( VOID )
  */
 VOID AG4_RndSetProj( VOID )
 {
-  AG4_RndWp = AG4_RndProjSize;
-  AG4_RndHp = AG4_RndProjSize;
+  DBL rx = AG4_RndProjSize / 2, ry = AG4_RndProjSize / 2;
+
   if (AG4_Anim.W > AG4_Anim.H)
-    AG4_RndWp *= (DBL)AG4_Anim.W / AG4_Anim.H;
+    rx *= (DBL)AG4_Anim.W / AG4_Anim.H;
   else
-    AG4_RndHp *= (DBL)AG4_Anim.H / AG4_Anim.W;
-} /* End of 'VG4_RndSetProj' function */
+    ry *= (DBL)AG4_Anim.H / AG4_Anim.W;
+
+  AG4_RndMatrProj = MatrFrustum(-rx, rx, -ry, ry, AG4_RndProjDist, AG4_RndProjFarClip);
+} /* End of 'AG4_RndSetProj' function */
 
 /* END OF 'RENDER.C' FILE */

@@ -106,38 +106,32 @@ VOID AG4_RndObjDraw( ag4OBJ3D *Obj, MATR M )
 {
   INT i;
   POINT *pts;
+  MATR WVP;
 
   if ((pts = malloc(sizeof(POINT) * Obj->NumOfV)) == NULL)
     return;
 
-  M = MatrMulMatr(M, AG4_RndMatrView);
+  WVP = MatrMulMatr(M, MatrMulMatr(AG4_RndMatrView, AG4_RndMatrProj));
 
   /* Project all points */
   for (i = 0; i < Obj->NumOfV; i++)
   {
-    VEC p = VecMulMatr43(Obj->V[i], M);
-    DBL
-      xp = p.X * AG4_RndProjDist / -p.Z,
-      yp = p.Y * AG4_RndProjDist / -p.Z;
+    VEC P = PointTransform(Obj->V[i], WVP);
 
-    pts[i].x = AG4_Anim.W / 2 + xp * AG4_Anim.W / AG4_RndWp;
-    pts[i].y = AG4_Anim.H / 2 - yp * AG4_Anim.H / AG4_RndHp;
+    pts[i].x = (P.X + 1) * AG4_Anim.W / 2;
+    pts[i].y = (-P.Y + 1) * AG4_Anim.H / 2;
   }
 
   /* Draw all facets */
   for (i = 0; i < Obj->NumOfF; i++)
   {
-    POINT *p = &pts[Obj->F[i][0]];
-    MoveToEx(AG4_Anim.hDC, p->x, p->y, NULL);
-
-    p = &pts[Obj->F[i][1]];
-    LineTo(AG4_Anim.hDC, p->x, p->y);
-
-    p = &pts[Obj->F[i][2]];
-    LineTo(AG4_Anim.hDC, p->x, p->y);
-
-    p = &pts[Obj->F[i][0]];
-    LineTo(AG4_Anim.hDC, p->x, p->y);
+    POINT p[3];
+    
+    p[0] = pts[Obj->F[i][0]];
+    p[1] = pts[Obj->F[i][1]];
+    p[2] = pts[Obj->F[i][2]];
+    
+    Polygon(AG4_Anim.hDC, p, 3);
   }
   free(pts);
 } /* End of 'VG4_RndObjDraw' function */

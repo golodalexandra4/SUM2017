@@ -21,7 +21,7 @@
 #endif /* _DEBUG */
 #include <stdlib.h>
 
-#include "VEC.h"
+#include "vec.h"
 
 /* 64-bit integer data types */
 typedef __int64 INT64;

@@ -14,7 +14,7 @@
 typedef struct tagag4UNIT_GROUND
 {
   AG4_UNIT_BASE_FIELDS;
-  ag4OBJ Ground; /* Ground model1*/
+  ag4PRIM Ground; /* Ground model1*/
   FLT Rotate;
   VEC Pos;
 } ag4UNIT_GROUND;
@@ -29,7 +29,7 @@ typedef struct tagag4UNIT_GROUND
  */
 static VOID AG4_UnitInit( ag4UNIT_GROUND *Uni, ag4ANIM *Ani )
 {
-  AG4_RndPrimCreatePlane( &Uni->Ground, VecSet(-50, 0, -50), VecSet(100, 0, 0), VecSet(0, 0, 100), 100, 100);
+  AG4_RndPrimCreatePlane(&Uni->Ground, VecSet(-50, 0, 50), VecSet(100, 0, 0), VecSet(0, 0, -100), 100, 100);
 } /* End of 'AG4_UnitInit' function */
 
 /* Cow drawing unit deinitialization function.
@@ -42,7 +42,7 @@ static VOID AG4_UnitInit( ag4UNIT_GROUND *Uni, ag4ANIM *Ani )
  */
 static VOID AG4_UnitClose( ag4UNIT_GROUND *Uni, ag4ANIM *Ani )
 {
-  AG4_RndObjFree(&Uni->Ground);
+  AG4_RndPrimFree(&Uni->Ground);
 } /* End of 'AG4_UnitClose' function */
 
 
@@ -65,7 +65,7 @@ static VOID AG4_UnitRender( ag4UNIT_GROUND *Uni, ag4ANIM *Ani )
   tmp.X += Ani->Mz / 60;
   tmp.Y += Ani->Mz / 60;
   tmp.Z += Ani->Mz / 60;
-  AG4_RndObjDraw(&Uni->Ground, MatrMulMatr(MatrRotate(Uni->Rotate, VecSet(0, -1, 0)), MatrTranslate(tmp)));
+  AG4_RndPrimDraw(&Uni->Ground, MatrMulMatr(MatrRotate(Uni->Rotate, VecSet(0, -1, 0)), MatrTranslate(tmp)));
 }
 
 /* Ground drawing unit creation function.

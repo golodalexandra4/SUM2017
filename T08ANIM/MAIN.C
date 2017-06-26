@@ -49,9 +49,7 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 
   /* Add units */
-  AG4_AnimAddUnit(AG4_UnitCreateCow( ));
-  SelectObject(AG4_Anim.hDC, GetStockObject(DC_BRUSH));
-  SetDCBrushColor(AG4_Anim.hDC, RGB(0, 255, 0));
+  AG4_AnimAddUnit(AG4_UnitCreateCow());
   AG4_AnimAddUnit(AG4_UnitCreateControl());
 
 

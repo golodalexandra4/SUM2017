@@ -105,18 +105,20 @@ static VOID AG4_UnitResponse( ag4UNIT_CONTROL *Uni, ag4ANIM *Ani )
   {
     OldCactusTime = Ani->Time;
     Uni->TimeShift = rand() % 5 + 10;
-    AG4_AnimAddUnit(AG4_UnitCreateControl());
+    /// AG4_AnimAddUnit(AG4_UnitCreateControl());
   }
 
   Uni->Pos.X += Ani->Time / 400;
   Uni->Pos.Z += Ani->Time / 400;
+  /*Uni->Cactus.MaxV.X += Uni->Pos.X;
+  Uni->Cactus.MaxV.Z += Uni->Pos.Z;*/
 
-  /* Checking collision
+  /* Checking collision */
   if (AG4_IsColide(&Uni->Cactus))
   {
     AG4_Reset(Uni->Number - 1);
-    //AG4_RndObjFree(&Uni->Cactus);
-  }*/
+    AG4_RndObjFree(&Uni->Cactus);
+  }
 
   if (Ani->JButClick[6])
   {
@@ -152,7 +154,6 @@ static VOID AG4_UnitRender( ag4UNIT_CONTROL *Uni, ag4ANIM *Ani )
   tmp.X += Ani->Mz / 60;
   tmp.Y += Ani->Mz / 60;
   tmp.Z += Ani->Mz / 60;
-  //Uni->Cactus.MaxV = VecMulMatr3(Uni->Cactus.MaxV, MatrMulMatr(MatrRotate(Uni->Rotate, VecSet(0, -1, 0)), MatrTranslate(tmp)));
   AG4_RndObjDraw(&Uni->Cactus, MatrMulMatr(MatrRotate(Uni->Rotate, VecSet(0, -1, 0)), MatrTranslate(tmp)));
 
   /* Checking collision */

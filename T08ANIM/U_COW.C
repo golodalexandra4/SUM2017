@@ -40,6 +40,7 @@ static VOID AG4_UnitInit( ag4UNIT_COW *Uni, ag4ANIM *Ani )
  * RETURNS: None.
  */
 static VOID AG4_UnitClose( ag4UNIT_COW *Uni, ag4ANIM *Ani )
+
 {
   AG4_RndObjFree(&Uni->Cow);
 } /* End of 'AG4_UnitClose' function */
@@ -54,9 +55,9 @@ static VOID AG4_UnitClose( ag4UNIT_COW *Uni, ag4ANIM *Ani )
  */
 static VOID AG4_UnitResponse( ag4UNIT_COW *Uni, ag4ANIM *Ani )
 {
-
-  Uni->Rotate += Ani->DeltaTime * Ani->Keys[VK_LBUTTON] * Ani->Mx / 10; 
-  Uni->Rotate += Ani->DeltaTime * Ani->Keys[VK_RBUTTON] *( -Ani->Mx) / 10;
+  Uni->Rotate += Ani->DeltaTime * Ani->Keys[VK_LBUTTON] * Ani->Mdx * 2; 
+  Uni->Rotate += Ani->DeltaTime * Ani->Keys[VK_RBUTTON] *( -Ani->Mx) / 5;
+  Uni->Rotate += Ani->DeltaTime * AG4_MouseWheel * 2;
 } /* End of 'AG4_UnitResponse' function */
 
 /* Cow drawing unit render function.

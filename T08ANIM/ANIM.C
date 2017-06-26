@@ -112,8 +112,8 @@ VOID AG4_AnimRender( VOID )
   for (i = 0; i < AG4_Anim.NumOfUnits; i++)
   {
     SelectObject(AG4_Anim.hDC, GetStockObject(DC_PEN));
-    SelectObject(AG4_Anim.hDC, GetStockObject(DC_BRUSH));
-    SetDCBrushColor(AG4_Anim.hDC, RGB(150, 150, 150));
+    SelectObject(AG4_Anim.hDC, GetStockObject(NULL_BRUSH));
+    SetDCBrushColor(AG4_Anim.hDC, RGB(0, 150, 150));
     SetDCPenColor(AG4_Anim.hDC, RGB(50, 250, 150));
 
     AG4_Anim.Units[i]->Render(AG4_Anim.Units[i], &AG4_Anim);

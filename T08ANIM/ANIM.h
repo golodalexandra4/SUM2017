@@ -66,6 +66,7 @@ struct tagag4ANIM
   HDC hDC;
   INT W, H;
   HBITMAP hFrame;
+
   ag4UNIT *Units[AG4_MAX_UNITS];
   INT NumOfUnits;
   
